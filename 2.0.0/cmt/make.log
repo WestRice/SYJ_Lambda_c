@@ -1,0 +1,109 @@
+#CMT---> (constituents.make) Starting SYJ_Lambda_c
+#CMT---> (constituents.make) Starting config
+#CMT---> (constituents.make) Starting install_includes
+------> config.h ok
+Files from standard ../SYJ_Lambda_c already installed
+#CMT---> (constituents.make) config done
+#CMT---> (constituents.make) install_includes done
+#CMT---> compiling ../src/Sigma0PionPi0.cxx
+#CMT---> compiling ../src/components/Entries.cxx
+#CMT---> (constituents.make) Starting install_includes
+#CMT---> (constituents.make) Starting SYJ_Lambda_c
+#CMT---> (constituents.make) Starting config
+Files from standard ../SYJ_Lambda_c already installed
+#CMT---> (constituents.make) install_includes done
+------> config.h ok
+#CMT---> (constituents.make) config done
+#CMT---> compiling ../src/Sigma0PionPi0.cxx
+#CMT---> Info: Execute action make => gmake bin=../x86_64-slc6-gcc46-opt/ 
+#CMT---> (config.make) ../SYJ_Lambda_c/config.h.in: No rule for such target
+#CMT---> (SYJ_Lambda_c.make) ../x86_64-slc6-gcc46-opt//SYJ_Lambda_csetup.make: No rule for such target
+../src/Sigma0PionPi0.cxx: In member function ‘virtual StatusCode Sigma0PionPi0::execute()’:
+../src/Sigma0PionPi0.cxx:389:2: error: ‘Vector’ was not declared in this scope
+../src/Sigma0PionPi0.cxx:389:24: error: expected primary-expression before ‘>’ token
+../src/Sigma0PionPi0.cxx:389:26: error: ‘wtpALmd1s’ was not declared in this scope
+../src/Sigma0PionPi0.cxx:432:94: error: no matching function for call to ‘Sigma0PionPi0::isGoodLambda(RecMdcKalTrack*&, RecMdcKalTrack*&, double&, double&, double&, CLHEP::HepLorentzVector&, double&)’
+../src/Sigma0PionPi0.cxx:432:94: note: candidate is:
+/workfs/bes/suyj/BES3_WorkArea/7.0.3/InstallArea/include/SYJ_Lambda_c/SYJ_Lambda_c/Sigma0PionPi0.h:47:10: note: bool Sigma0PionPi0::isGoodLambda(RecMdcKalTrack*, RecMdcKalTrack*, double&, double&, double&, WTrackParameter&, double&)
+/workfs/bes/suyj/BES3_WorkArea/7.0.3/InstallArea/include/SYJ_Lambda_c/SYJ_Lambda_c/Sigma0PionPi0.h:47:10: note:   no known conversion for argument 6 from ‘CLHEP::HepLorentzVector’ to ‘WTrackParameter&’
+../src/Sigma0PionPi0.cxx:470:5: error: expected ‘;’ before ‘iSigma0lmd’
+../src/Sigma0PionPi0.cxx:494:4: error: expected ‘;’ before ‘}’ token
+../src/Sigma0PionPi0.cxx:512:3: error: ‘p4_pionp’ was not declared in this scope
+../src/Sigma0PionPi0.cxx:516:9: error: ‘p4_sigma0’ does not name a type
+../src/Sigma0PionPi0.cxx:524:10: error: ‘p4_pi0’ does not name a type
+../src/Sigma0PionPi0.cxx:526:41: error: ‘p4_sigma’ was not declared in this scope
+../src/Sigma0PionPi0.cxx:526:52: error: ‘p4_pi0’ was not declared in this scope
+../src/Sigma0PionPi0.cxx:544:25: error: incompatible types in assignment of ‘double’ to ‘NTuple::Item<double> [2]’
+../src/Sigma0PionPi0.cxx:545:12: error: ‘p4_lambda’ does not name a type
+../src/Sigma0PionPi0.cxx:548:30: error: ‘p4_sigma0’ was not declared in this scope
+../src/Sigma0PionPi0.cxx:551:30: error: ‘p4_lambda’ was not declared in this scope
+../src/Sigma0PionPi0.cxx:579:15: error: incompatible types in assignment of ‘int’ to ‘NTuple::Item<int> [2]’
+../src/Sigma0PionPi0.cxx:581:51: error: incompatible types in assignment of ‘double’ to ‘NTuple::Item<double> [2]’
+../src/Sigma0PionPi0.cxx:582:53: error: incompatible types in assignment of ‘double’ to ‘NTuple::Item<double> [2]’
+../src/Sigma0PionPi0.cxx:583:53: error: incompatible types in assignment of ‘double’ to ‘NTuple::Item<double> [2]’
+../src/Sigma0PionPi0.cxx:585:42: error: incompatible types in assignment of ‘double’ to ‘NTuple::Item<double> [2]’
+../src/Sigma0PionPi0.cxx:586:42: error: incompatible types in assignment of ‘double’ to ‘NTuple::Item<double> [2]’
+../src/Sigma0PionPi0.cxx:592:24: error: incompatible types in assignment of ‘double’ to ‘NTuple::Item<double> [2]’
+../src/Sigma0PionPi0.cxx:593:11: error: ‘p4_lambda’ does not name a type
+../src/Sigma0PionPi0.cxx:596:29: error: ‘p4_sigma0’ was not declared in this scope
+../src/Sigma0PionPi0.cxx:599:29: error: ‘p4_lambda’ was not declared in this scope
+../src/Sigma0PionPi0.cxx:649:20: error: name lookup of ‘i_pionp’ changed for ISO ‘for’ scoping [-fpermissive]
+../src/Sigma0PionPi0.cxx:649:20: note: (if you use ‘-fpermissive’ G++ will accept your code)
+../src/Sigma0PionPi0.cxx:654:3: error: ‘p4_pionm’ was not declared in this scope
+../src/Sigma0PionPi0.cxx:658:9: error: ‘p4_sigma0’ does not name a type
+../src/Sigma0PionPi0.cxx:666:10: error: ‘p4_pi0’ does not name a type
+../src/Sigma0PionPi0.cxx:668:30: error: ‘p4_pionp’ was not declared in this scope
+../src/Sigma0PionPi0.cxx:668:41: error: ‘p4_sigma’ was not declared in this scope
+../src/Sigma0PionPi0.cxx:668:52: error: ‘p4_pi0’ was not declared in this scope
+../src/Sigma0PionPi0.cxx:686:25: error: incompatible types in assignment of ‘double’ to ‘NTuple::Item<double> [2]’
+../src/Sigma0PionPi0.cxx:687:12: error: ‘p4_lambda’ does not name a type
+../src/Sigma0PionPi0.cxx:690:30: error: ‘p4_sigma0’ was not declared in this scope
+../src/Sigma0PionPi0.cxx:693:30: error: ‘p4_lambda’ was not declared in this scope
+../src/Sigma0PionPi0.cxx:734:24: error: incompatible types in assignment of ‘double’ to ‘NTuple::Item<double> [2]’
+../src/Sigma0PionPi0.cxx:735:11: error: ‘p4_lambda’ does not name a type
+../src/Sigma0PionPi0.cxx:738:29: error: ‘p4_sigma0’ was not declared in this scope
+../src/Sigma0PionPi0.cxx:741:29: error: ‘p4_lambda’ was not declared in this scope
+../src/Sigma0PionPi0.cxx: In member function ‘virtual StatusCode Sigma0PionPi0::finalize()’:
+../src/Sigma0PionPi0.cxx:806:27: error: ‘m_cout_pkpi’ was not declared in this scope
+../src/Sigma0PionPi0.cxx: At global scope:
+../src/Sigma0PionPi0.cxx:986:176: error: no ‘bool Sigma0PionPi0::isGoodlmd(RecMdcKalTrack*, RecMdcKalTrack*, double&, double&, double&, WTrackParameter&, double&)’ member function declared in class ‘Sigma0PionPi0’
+../src/Sigma0PionPi0.cxx: In member function ‘bool Sigma0PionPi0::isGoodSigma0(WTrackParameter*, RecEmcShower*, double&, CLHEP::HepLorentzVector&, double&, CLHEP::HepLorentzVector&)’:
+../src/Sigma0PionPi0.cxx:1135:19: error: request for member ‘p’ in ‘lmd’, which is of non-class type ‘WTrackParameter*’
+../src/Sigma0PionPi0.cxx:1145:30: error: no matching function for call to ‘KalmanKinematicFit::AddTrack(int, double, WTrackParameter*&)’
+../src/Sigma0PionPi0.cxx:1145:30: note: candidates are:
+/afs/ihep.ac.cn/bes3/offline/Boss/7.0.3/InstallArea/include/VertexFit/VertexFit/TrackPool.h:40:14: note: void TrackPool::AddTrack(int, double, const RecMdcTrack*)
+/afs/ihep.ac.cn/bes3/offline/Boss/7.0.3/InstallArea/include/VertexFit/VertexFit/TrackPool.h:40:14: note:   no known conversion for argument 3 from ‘WTrackParameter*’ to ‘const RecMdcTrack*’
+/afs/ihep.ac.cn/bes3/offline/Boss/7.0.3/InstallArea/include/VertexFit/VertexFit/TrackPool.h:41:14: note: void TrackPool::AddTrack(int, double, const RecMdcKalTrack*)
+/afs/ihep.ac.cn/bes3/offline/Boss/7.0.3/InstallArea/include/VertexFit/VertexFit/TrackPool.h:41:14: note:   no known conversion for argument 3 from ‘WTrackParameter*’ to ‘const RecMdcKalTrack*’
+/afs/ihep.ac.cn/bes3/offline/Boss/7.0.3/InstallArea/include/VertexFit/VertexFit/TrackPool.h:42:14: note: void TrackPool::AddTrack(int, double, const RecEmcShower*)
+/afs/ihep.ac.cn/bes3/offline/Boss/7.0.3/InstallArea/include/VertexFit/VertexFit/TrackPool.h:42:14: note:   no known conversion for argument 3 from ‘WTrackParameter*’ to ‘const RecEmcShower*’
+/afs/ihep.ac.cn/bes3/offline/Boss/7.0.3/InstallArea/include/VertexFit/VertexFit/TrackPool.h:44:14: note: void TrackPool::AddTrack(int, WTrackParameter)
+/afs/ihep.ac.cn/bes3/offline/Boss/7.0.3/InstallArea/include/VertexFit/VertexFit/TrackPool.h:44:14: note:   candidate expects 2 arguments, 3 provided
+gmake[2]: *** [../x86_64-slc6-gcc46-opt/Sigma0PionPi0.o] Error 1
+gmake[1]: *** [SYJ_Lambda_c] Error 2
+gmake: *** [all] Error 2
+#CMT---> Error: execution failed : make
+#CMT---> Info: Execute action make => gmake bin=../x86_64-slc6-gcc46-opt/ 
+#CMT---> (config.make) ../SYJ_Lambda_c/config.h.in: No rule for such target
+#CMT---> (SYJ_Lambda_c.make) ../x86_64-slc6-gcc46-opt//SYJ_Lambda_csetup.make: No rule for such target
+../src/Sigma0PionPi0.cxx: In member function ‘virtual StatusCode Sigma0PionPi0::execute()’:
+../src/Sigma0PionPi0.cxx:668:30: error: ‘p4_pionp’ was not declared in this scope
+../src/Sigma0PionPi0.cxx: In member function ‘virtual StatusCode Sigma0PionPi0::finalize()’:
+../src/Sigma0PionPi0.cxx:806:27: error: ‘m_cout_pkpi’ was not declared in this scope
+../src/Sigma0PionPi0.cxx: In member function ‘bool Sigma0PionPi0::isGoodLambda(RecMdcKalTrack*, RecMdcKalTrack*, double&, double&, double&, WTrackParameter&, double&)’:
+../src/Sigma0PionPi0.cxx:1028:3: error: ‘p4_lmd_1s’ was not declared in this scope
+../src/Sigma0PionPi0.cxx: In member function ‘bool Sigma0PionPi0::isGoodSigma0(WTrackParameter*, RecEmcShower*, double&, CLHEP::HepLorentzVector&, double&, CLHEP::HepLorentzVector&)’:
+../src/Sigma0PionPi0.cxx:1145:31: error: no matching function for call to ‘KalmanKinematicFit::AddTrack(int, double, WTrackParameter&)’
+../src/Sigma0PionPi0.cxx:1145:31: note: candidates are:
+/afs/ihep.ac.cn/bes3/offline/Boss/7.0.3/InstallArea/include/VertexFit/VertexFit/TrackPool.h:40:14: note: void TrackPool::AddTrack(int, double, const RecMdcTrack*)
+/afs/ihep.ac.cn/bes3/offline/Boss/7.0.3/InstallArea/include/VertexFit/VertexFit/TrackPool.h:40:14: note:   no known conversion for argument 3 from ‘WTrackParameter’ to ‘const RecMdcTrack*’
+/afs/ihep.ac.cn/bes3/offline/Boss/7.0.3/InstallArea/include/VertexFit/VertexFit/TrackPool.h:41:14: note: void TrackPool::AddTrack(int, double, const RecMdcKalTrack*)
+/afs/ihep.ac.cn/bes3/offline/Boss/7.0.3/InstallArea/include/VertexFit/VertexFit/TrackPool.h:41:14: note:   no known conversion for argument 3 from ‘WTrackParameter’ to ‘const RecMdcKalTrack*’
+/afs/ihep.ac.cn/bes3/offline/Boss/7.0.3/InstallArea/include/VertexFit/VertexFit/TrackPool.h:42:14: note: void TrackPool::AddTrack(int, double, const RecEmcShower*)
+/afs/ihep.ac.cn/bes3/offline/Boss/7.0.3/InstallArea/include/VertexFit/VertexFit/TrackPool.h:42:14: note:   no known conversion for argument 3 from ‘WTrackParameter’ to ‘const RecEmcShower*’
+/afs/ihep.ac.cn/bes3/offline/Boss/7.0.3/InstallArea/include/VertexFit/VertexFit/TrackPool.h:44:14: note: void TrackPool::AddTrack(int, WTrackParameter)
+/afs/ihep.ac.cn/bes3/offline/Boss/7.0.3/InstallArea/include/VertexFit/VertexFit/TrackPool.h:44:14: note:   candidate expects 2 arguments, 3 provided
+gmake[2]: *** [../x86_64-slc6-gcc46-opt/Sigma0PionPi0.o] Error 1
+gmake[1]: *** [SYJ_Lambda_c] Error 2
+gmake: *** [all] Error 2
+#CMT---> Error: execution failed : make

@@ -1,0 +1,9 @@
+#include "$MCDECAYMODESVCROOT/share/GetDecayMode.txt"
+#include "$EVENTWRITERROOT/share/jobOptions_EventWriter.txt"
+#include "$VERTEXFITROOT/share/jobOptions_VertexDbSvc.txt"
+
+ApplicationMgr.DLLs += {"SYJ_Lambda_c"};
+ApplicationMgr.TopAlg +={"Sigma0PionPi0"};
+
+Sigma0PionPi0.debug=false;
+Sigma0PionPi0.use1c_sigma0=true;
