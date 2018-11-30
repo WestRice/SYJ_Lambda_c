@@ -194,6 +194,8 @@ StatusCode Sigma0PipPipPim::initialize(){
 				m_tuple_mc = ntupleSvc()->book ("FILE1/mc_truth", CLID_ColumnWiseTuple, "exam N-Tuple example");
 				if ( m_tuple_mc )    
 				{
+					status = m_tuple_mc->addItem ("run", mc_run);
+					status = m_tuple_mc->addItem ("event", mc_event);
 					status = m_tuple_mc->addItem ("mode1", mc_mode1);
 					status = m_tuple_mc->addItem ("mode2", mc_mode2);
 					status = m_tuple_mc->addItem ("mode3", mc_mode3);
@@ -246,6 +248,8 @@ StatusCode Sigma0PipPipPim::execute(){
 		m_event[0]=eventNo;
 		m_event[1]=eventNo;
 
+		mc_run = runNo;
+		mc_event = eventNo;
 
 	if(m_debug) std::cerr<<"!!!!!!!!!!!!!!!!!"<<"Run number: "<<runNo<<"!!!!!!!!!!"<<std::endl;
 		log << MSG::DEBUG <<"run, evtnum = "
