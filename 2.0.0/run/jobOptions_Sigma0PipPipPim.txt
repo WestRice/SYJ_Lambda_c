@@ -7,4 +7,4 @@ ApplicationMgr.TopAlg +={"Sigma0PipPipPim"};
 
 Sigma0PipPipPim.debug=false;
 Sigma0PipPipPim.use1c_sigma0=true;
-Sigma0PipPipPim.CheckTotal=false;
+Sigma0PipPipPim.CheckTotal=true;

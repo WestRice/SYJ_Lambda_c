@@ -820,7 +820,7 @@ StatusCode Sigma0PipPipPim::execute(){
 		RecMdcKalTrack::setPidType  (RecMdcKalTrack::pion);
 		HepLorentzVector p4_pionp1 = ((*itTrk)->mdcKalTrack())->p4(PDG::Pion);
 
-	for(int i_pionp2 = i_pionp1; i_pionp2 < iPionp.size(); i_pionp2++)
+	for(int i_pionp2 = i_pionp1 + 1; i_pionp2 < iPionp.size(); i_pionp2++)
 	{
 		EvtRecTrackIterator itTrk=evtRecTrkCol->begin() + iPionp[i_pionp2];
 		RecMdcKalTrack::setPidType  (RecMdcKalTrack::pion);
@@ -995,7 +995,7 @@ StatusCode Sigma0PipPipPim::execute(){
 		//RecMdcKalTrack *kaltrk = (*itTrk)->mdcKalTrack();
 		HepLorentzVector p4_pionm1 = ((*itTrk)->mdcKalTrack())->p4(PDG::Pion);
 
-	for(int i_pionm2 = i_pionm1; i_pionm2 < iPionm.size(); i_pionm2++)
+	for(int i_pionm2 = i_pionm1 + 1; i_pionm2 < iPionm.size(); i_pionm2++)
 	{
 		EvtRecTrackIterator itTrk=evtRecTrkCol->begin() + iPionm[i_pionm2];
 		RecMdcKalTrack::setPidType  (RecMdcKalTrack::pion);

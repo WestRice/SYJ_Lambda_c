@@ -7,4 +7,4 @@ ApplicationMgr.TopAlg +={"Sigma0PionEta"};
 
 Sigma0PionEta.debug=false;
 Sigma0PionEta.use1c_sigma0=true;
-Sigma0PionEta.CheckTotal=false;
+Sigma0PionEta.CheckTotal=true;
