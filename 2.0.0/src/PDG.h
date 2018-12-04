@@ -15,7 +15,7 @@ namespace PDG{
 		const double Muon		= 105.65837*MeV;
 		const double Pion		= 139.5706*MeV;
 		const double Kaon		= 493.68*MeV;
-		const double Proton		= 938.272081;
+		const double Proton		= 938.272081*MeV;
 		const double Lambda_c	= 2.2865*GeV;
 
 		const double Eta		= 547.86*MeV;
