@@ -815,180 +815,6 @@ StatusCode Sigma0PipPipPim::execute(){
 	int cnt_Lp=0, cnt_Lm=0; 
 	double tmp_De_lp=999, tmp_De_lm=999;
 
-	if(m_debug) std::cerr<<"!!!!!!!!!!!!!!!!!"<<"Enter Lambda_c +"<<"!!!!!!!!!!"<<std::endl;
-	//lambda_c + --> sigma0 pi+ pi0
-	bool have_best_lambda_cp = false;
-	for(int i_pionp1 =0; i_pionp1 < iPionp.size();i_pionp1++)
-	{
-		EvtRecTrackIterator itTrk=evtRecTrkCol->begin() + iPionp[i_pionp1];
-		RecMdcKalTrack::setPidType  (RecMdcKalTrack::pion);
-		HepLorentzVector p4_pionp1 = ((*itTrk)->mdcKalTrack())->p4(PDG::Pion);
-
-		for(int i_pionp2 = i_pionp1 + 1; i_pionp2 < iPionp.size(); i_pionp2++)
-		{
-			EvtRecTrackIterator itTrk2 =evtRecTrkCol->begin() + iPionp[i_pionp2];
-			RecMdcKalTrack::setPidType  (RecMdcKalTrack::pion);
-			HepLorentzVector p4_pionp2 = ((*itTrk2)->mdcKalTrack())->p4(PDG::Pion);
-
-			for(int i_pionm = 0; i_pionm < iPionm.size(); i_pionm++)
-			{
-				EvtRecTrackIterator itTrk3 = evtRecTrkCol->begin() + iPionm[i_pionm];
-				RecMdcKalTrack::setPidType  (RecMdcKalTrack::pion);
-				HepLorentzVector p4_pionm = ((*itTrk3)->mdcKalTrack())->p4(PDG::Pion);
-
-				for(int i_sigma0 = 0; i_sigma0 < p4Sigma01c.size(); i_sigma0++)
-				{
-					HepLorentzVector p4_sigma0 = p4Sigma01c[i_sigma0];
-
-					//for(int i_pi0 = 0; i_pi0 < p4Pi01c.size(); i_pi0++)
-					{
-						//if(iPi0gam1[i_pi0] == iSigma0gam[i_sigma0] || 
-						//  iPi0gam2[i_pi0] == iSigma0gam[i_sigma0]  )
-						//	continue;
-
-						int iLmd = iSigma0lmd[i_sigma0];
-						if( iLmdpp[iLmd] == iPionp[i_pionp1] ||
-								iLmdpp[iLmd] == iPionp[i_pionp2] ||  
-								iLmdpim[iLmd] == iPionm[i_pionm])
-							continue;
-
-						//HepLorentzVector p4_pi0 = p4Pi01c[i_pi0];	
-						//double check_rho = (p4_pionp + p4_pi0).m();
-						//if(Cut::Rho(check_rho)) continue;
-
-						//boost 
-						HepLorentzVector cms(0,0,0,m_ecms);
-						HepLorentzVector tot_p4= p4_pionp1 + p4_pionp2 + p4_pionm + p4_sigma0;
-						HepLorentzVector tot_p4_boost;
-						tot_p4_boost = tot_p4.boost(-0.011,0.,0.);
-						double mbc2 = m_beamE*m_beamE- tot_p4_boost.v().mag2();
-						double mbc = mbc2 > 0 ? sqrt( mbc2 ) : -10;
-						double deltaE = tot_p4_boost.t() - m_beamE;
-
-						if(m_BestCandidate)
-						{
-							if(fabs(deltaE)<tmp_De_lp)
-							{
-								have_best_lambda_cp = true;
-								cnt_Lp++;
-								tmp_De_lp=fabs(deltaE);
-
-								m_mass[0] = tot_p4.m();
-								HepLorentzVector p4_lambda = wtpLmd1s[iSigma0lmd[i_sigma0]].p(); 
-								for(int pp=0;pp<4;pp++)
-								{
-									m_fourmom[0][0][pp] = p4_sigma0[pp];
-									//m_fourmom[0][1][pp] = p4_pionp[pp];
-									//m_fourmom[0][2][pp] = p4_pi0[pp];
-									m_lambda_p4[0][pp]  = p4_lambda[pp]; 
-
-									//			m_pi0_gam1_p4[0][pp] = p4Pi0gam1[i_pi0][pp];
-									//				m_pi0_gam2_p4[0][pp] = p4Pi0gam2[i_pi0][pp];
-									m_sigma0_gam_p4[0][pp] =  p4Sigma0gam[i_sigma0][pp];
-								}
-								//				m_xy[0]=Rxy_pp[i];m_z[0]=Rz_pp[i];
-								//				m_xy[1]=Rxy_km[j];m_z[1]=Rz_km[j];
-								//				m_xy[2]=Rxy_pip[t];m_z[2]=Rz_pip[t];
-								//				m_mom[0] = proton_p4.vect().mag();
-								//				m_mom[1] = kaon_p4.vect().mag();
-								//				m_mom[2] = pion_p4.vect().mag();
-								//m_flag[0]=1;
-								m_charge[0]=1;
-								m_ebeam[0] = m_beamE;
-								m_mbc[0]=mbc;
-								m_deltaE[0]=deltaE;
-								m_ngood[0]=iGood.size();
-								//	m_phi_p=proton_p4.vect().phi();
-								//	m_phi_k=kaon_p4.vect().phi();
-								//	m_phi_pi=pion_p4.vect().phi();
-								//	m_theta_p=proton_p4.vect().theta();
-								//	m_theta_k=kaon_p4.vect().theta();
-								//	m_theta_pi=pion_p4.vect().theta();
-								//	m_oa_ppi= proton_p4.vect().angle(pion_p4.vect());
-								//	m_oa_pk = proton_p4.vect().angle(kaon_p4.vect());
-								//	m_oa_kpi= kaon_p4.vect().angle(pion_p4.vect());
-								//	m_diphi_ppi= proton_p4.vect().phi()-pion_p4.vect().phi();
-								//	m_diphi_pk = proton_p4.vect().phi()-kaon_p4.vect().phi();
-								//	m_diphi_kpi= kaon_p4.vect().phi()-pion_p4.vect().phi();
-								m_index[0]=3;
-
-								m_lambda_mass[0] = massLmd[iSigma0lmd[i_sigma0]];
-								m_lambda_chis1[0] = chis1Lmd[iSigma0lmd[i_sigma0]];
-								m_lambda_lchue[0] = lchueLmd[iSigma0lmd[i_sigma0]];
-
-								m_sigma0_mass[0] = massSigma0[i_sigma0];
-								m_sigma01c_mass[0] = p4_sigma0.m();
-								m_sigma0_chis[0] = chisSigma0[i_sigma0];
-
-							}
-						}
-						else 
-						{
-							++cnt_Lp;
-							m_mass[0] = tot_p4.m();
-							HepLorentzVector p4_lambda = wtpLmd1s[iSigma0lmd[i_sigma0]].p(); 
-							for(int pp=0;pp<4;pp++)
-							{
-								m_fourmom[0][0][pp] = p4_sigma0[pp];
-								//		m_fourmom[0][1][pp] = p4_pionp[pp];
-								//		m_fourmom[0][2][pp] = p4_pi0[pp];
-								m_lambda_p4[0][pp]  = p4_lambda[pp]; 
-
-								//		m_pi0_gam1_p4[0][pp] = p4Pi0gam1[i_pi0][pp];
-								//		m_pi0_gam2_p4[0][pp] = p4Pi0gam2[i_pi0][pp];
-								m_sigma0_gam_p4[0][pp] =  p4Sigma0gam[i_sigma0][pp];
-							}
-							//			m_xy[0]=Rxy_pp[i];m_z[0]=Rz_pp[i];
-							//			m_xy[1]=Rxy_km[j];m_z[1]=Rz_km[j];
-							//			m_xy[2]=Rxy_pip[t];m_z[2]=Rz_pip[t];
-							//			m_mom[0] = proton_p4.vect().mag();
-							//			m_mom[1] = kaon_p4.vect().mag();
-							//			m_mom[2] = pion_p4.vect().mag();
-							//m_flag[0]=1;
-							m_charge[0]=1;
-							m_ebeam[0] = m_beamE;
-							m_mbc[0]=mbc;
-							m_deltaE[0]=deltaE;
-							m_ngood[0]=iGood.size();
-							//	m_phi_p=proton_p4.vect().phi();
-							//	m_phi_k=kaon_p4.vect().phi();
-							//	m_phi_pi=pion_p4.vect().phi();
-							//	m_theta_p=proton_p4.vect().theta();
-							//	m_theta_k=kaon_p4.vect().theta();
-							//	m_theta_pi=pion_p4.vect().theta();
-							//	m_oa_ppi= proton_p4.vect().angle(pion_p4.vect());
-							//	m_oa_pk = proton_p4.vect().angle(kaon_p4.vect());
-							//	m_oa_kpi= kaon_p4.vect().angle(pion_p4.vect());
-							//	m_diphi_ppi= proton_p4.vect().phi()-pion_p4.vect().phi();
-							//	m_diphi_pk = proton_p4.vect().phi()-kaon_p4.vect().phi();
-							//	m_diphi_kpi= kaon_p4.vect().phi()-pion_p4.vect().phi();
-							m_index[0]=3;
-
-							m_lambda_mass[0] = massLmd[iSigma0lmd[i_sigma0]];
-							m_lambda_chis1[0] = chis1Lmd[iSigma0lmd[i_sigma0]];
-							m_lambda_lchue[0] = lchueLmd[iSigma0lmd[i_sigma0]];
-
-							m_sigma0_mass[0] = massSigma0[i_sigma0];
-							m_sigma01c_mass[0] = p4_sigma0.m();
-							m_sigma0_chis[0] = chisSigma0[i_sigma0];
-
-							m_tuple[0]->write();
-						}
-					}
-
-				}
-			}
-		}
-
-	}
-
-	if(m_BestCandidate && have_best_lambda_cp)
-	{	
-
-		m_tuple[0]->write();
-	}
-	if(m_debug) std::cerr<<"!!!!!!!!!!!!!!!!!"<<cnt_Lp<<"!!!!!!!!!!"<<std::endl;
-
 	if(m_debug) std::cerr<<"!!!!!!!!!!!!!!!!!"<<"Enter Good Lambda_c -"<<"!!!!!!!!!!"<<std::endl;
 	//lamdac- -- > Asigma0 pi- pi0
 	bool have_best_lambda_cm = false;
@@ -1016,109 +842,57 @@ StatusCode Sigma0PipPipPim::execute(){
 					HepLorentzVector p4_sigma0 = p4ASigma01c[i_sigma0];
 
 					//for(int i_pi0 = 0; i_pi0 < p4Pi01c.size(); i_pi0++)
+
+					//			if(iPi0gam1[i_pi0] == iASigma0gam[i_sigma0] || 
+					//			   iPi0gam2[i_pi0] == iASigma0gam[i_sigma0]  )
+					//				continue;
+
+					int iLmd = iASigma0lmd[i_sigma0];
+					if( iLmdpm[iLmd] == iPionm[i_pionm1] ||
+							iLmdpm[iLmd] == iPionm[i_pionm2] ||
+							iLmdpip[iLmd] == iPionp[i_pionp])
+						continue;
+
+					//HepLorentzVector p4_pi0 = p4Pi01c[i_pi0];	
+					//double check_rho = (p4_pionm + p4_pi0).m();
+					//if(Cut::Rho(check_rho)) continue;
+					//boost 
+					HepLorentzVector cms(0,0,0,m_ecms);
+					HepLorentzVector tot_p4= p4_pionm1 + p4_pionm2 + p4_pionp + p4_sigma0 ;
+					HepLorentzVector tot_p4_boost;
+					tot_p4_boost = tot_p4.boost(-0.011,0.,0.);
+					double mbc2 = m_beamE*m_beamE- tot_p4_boost.v().mag2();
+					double mbc = mbc2 > 0 ? sqrt( mbc2 ) : -10;
+					double deltaE = tot_p4_boost.t() - m_beamE;
+
+					if(m_BestCandidate)
 					{
-						//			if(iPi0gam1[i_pi0] == iASigma0gam[i_sigma0] || 
-						//			   iPi0gam2[i_pi0] == iASigma0gam[i_sigma0]  )
-						//				continue;
-
-						int iLmd = iASigma0lmd[i_sigma0];
-						if( iLmdpm[iLmd] == iPionm[i_pionm1] ||
-								iLmdpm[iLmd] == iPionm[i_pionm2] ||
-								iLmdpip[iLmd] == iPionp[i_pionp])
-							continue;
-
-						//HepLorentzVector p4_pi0 = p4Pi01c[i_pi0];	
-						//double check_rho = (p4_pionm + p4_pi0).m();
-						//if(Cut::Rho(check_rho)) continue;
-						//boost 
-						HepLorentzVector cms(0,0,0,m_ecms);
-						HepLorentzVector tot_p4= p4_pionm1 + p4_pionm2 + p4_pionp + p4_sigma0 ;
-						HepLorentzVector tot_p4_boost;
-						tot_p4_boost = tot_p4.boost(-0.011,0.,0.);
-						double mbc2 = m_beamE*m_beamE- tot_p4_boost.v().mag2();
-						double mbc = mbc2 > 0 ? sqrt( mbc2 ) : -10;
-						double deltaE = tot_p4_boost.t() - m_beamE;
-
-						if(m_BestCandidate)
+						if(fabs(deltaE)<tmp_De_lm)
 						{
-							if(fabs(deltaE)<tmp_De_lm)
-							{
-								have_best_lambda_cm = true;
-								cnt_Lm++;
-								tmp_De_lm=fabs(deltaE);
+							have_best_lambda_cm = true;
+							cnt_Lm++;
+							tmp_De_lm=fabs(deltaE);
 
-								m_mass[1] = tot_p4.m();
-								HepLorentzVector p4_lambda = wtpALmd1s[iASigma0lmd[i_sigma0]].p(); 
-								for(int pp=0;pp<4;pp++)
-								{
-									m_fourmom[1][0][pp] = p4_sigma0[pp];
-									//m_fourmom[1][1][pp] = p4_pionm[pp];
-									//m_fourmom[1][2][pp] = p4_pi0[pp];
-									m_lambda_p4[1][pp]  = p4_lambda[pp]; 
-
-									//	m_pi0_gam1_p4[1][pp] = p4Pi0gam1[i_pi0][pp];
-									//	m_pi0_gam2_p4[1][pp] = p4Pi0gam2[i_pi0][pp];
-									m_sigma0_gam_p4[1][pp] =  p4ASigma0gam[i_sigma0][pp];
-
-								}
-								//				m_xy[0]=Rxy_pp[i];m_z[0]=Rz_pp[i];
-								//				m_xy[1]=Rxy_km[j];m_z[1]=Rz_km[j];
-								//				m_xy[2]=Rxy_pip[t];m_z[2]=Rz_pip[t];
-								//				m_mom[0] = proton_p4.vect().mag();
-								//				m_mom[1] = kaon_p4.vect().mag();
-								//				m_mom[2] = pion_p4.vect().mag();
-								//m_flag[1]=-1;
-								m_charge[1]=-1;
-								m_ebeam[1] = m_beamE;
-								m_mbc[1]=mbc;
-								m_deltaE[1]=deltaE;
-								m_ngood[1]=iGood.size();
-								//	m_phi_p=proton_p4.vect().phi();
-								//	m_phi_k=kaon_p4.vect().phi();
-								//	m_phi_pi=pion_p4.vect().phi();
-								//	m_theta_p=proton_p4.vect().theta();
-								//	m_theta_k=kaon_p4.vect().theta();
-								//	m_theta_pi=pion_p4.vect().theta();
-								//	m_oa_ppi= proton_p4.vect().angle(pion_p4.vect());
-								//	m_oa_pk = proton_p4.vect().angle(kaon_p4.vect());
-								//	m_oa_kpi= kaon_p4.vect().angle(pion_p4.vect());
-								//	m_diphi_ppi= proton_p4.vect().phi()-pion_p4.vect().phi();
-								//	m_diphi_pk = proton_p4.vect().phi()-kaon_p4.vect().phi();
-								//	m_diphi_kpi= kaon_p4.vect().phi()-pion_p4.vect().phi();
-								m_index[1]=3;
-
-								m_lambda_mass[1] = massALmd[iASigma0lmd[i_sigma0]];
-								m_lambda_chis1[1] = chis1ALmd[iASigma0lmd[i_sigma0]];
-								m_lambda_lchue[1] = lchueALmd[iASigma0lmd[i_sigma0]];
-
-								m_sigma0_mass[1] = massASigma0[i_sigma0];
-								m_sigma01c_mass[1] = p4_sigma0.m();
-								m_sigma0_chis[1] = chisASigma0[i_sigma0];
-
-							}
-						}
-						else 
-						{
-							++cnt_Lm;
 							m_mass[1] = tot_p4.m();
 							HepLorentzVector p4_lambda = wtpALmd1s[iASigma0lmd[i_sigma0]].p(); 
 							for(int pp=0;pp<4;pp++)
 							{
 								m_fourmom[1][0][pp] = p4_sigma0[pp];
-								//		m_fourmom[1][1][pp] = p4_pionm[pp];
-								//		m_fourmom[1][2][pp] = p4_pi0[pp];
+								//m_fourmom[1][1][pp] = p4_pionm[pp];
+								//m_fourmom[1][2][pp] = p4_pi0[pp];
 								m_lambda_p4[1][pp]  = p4_lambda[pp]; 
 
-								//		m_pi0_gam1_p4[1][pp] = p4Pi0gam1[i_pi0][pp];
-								//		m_pi0_gam2_p4[1][pp] = p4Pi0gam2[i_pi0][pp];
+								//	m_pi0_gam1_p4[1][pp] = p4Pi0gam1[i_pi0][pp];
+								//	m_pi0_gam2_p4[1][pp] = p4Pi0gam2[i_pi0][pp];
 								m_sigma0_gam_p4[1][pp] =  p4ASigma0gam[i_sigma0][pp];
+
 							}
-							//			m_xy[0]=Rxy_pp[i];m_z[0]=Rz_pp[i];
-							//			m_xy[1]=Rxy_km[j];m_z[1]=Rz_km[j];
-							//			m_xy[2]=Rxy_pip[t];m_z[2]=Rz_pip[t];
-							//			m_mom[0] = proton_p4.vect().mag();
-							//			m_mom[1] = kaon_p4.vect().mag();
-							//			m_mom[2] = pion_p4.vect().mag();
+							//				m_xy[0]=Rxy_pp[i];m_z[0]=Rz_pp[i];
+							//				m_xy[1]=Rxy_km[j];m_z[1]=Rz_km[j];
+							//				m_xy[2]=Rxy_pip[t];m_z[2]=Rz_pip[t];
+							//				m_mom[0] = proton_p4.vect().mag();
+							//				m_mom[1] = kaon_p4.vect().mag();
+							//				m_mom[2] = pion_p4.vect().mag();
 							//m_flag[1]=-1;
 							m_charge[1]=-1;
 							m_ebeam[1] = m_beamE;
@@ -1147,9 +921,61 @@ StatusCode Sigma0PipPipPim::execute(){
 							m_sigma01c_mass[1] = p4_sigma0.m();
 							m_sigma0_chis[1] = chisASigma0[i_sigma0];
 
-							m_tuple[1]->write();
 						}
 					}
+					else 
+					{
+						++cnt_Lm;
+						m_mass[1] = tot_p4.m();
+						HepLorentzVector p4_lambda = wtpALmd1s[iASigma0lmd[i_sigma0]].p(); 
+						for(int pp=0;pp<4;pp++)
+						{
+							m_fourmom[1][0][pp] = p4_sigma0[pp];
+							//		m_fourmom[1][1][pp] = p4_pionm[pp];
+							//		m_fourmom[1][2][pp] = p4_pi0[pp];
+							m_lambda_p4[1][pp]  = p4_lambda[pp]; 
+
+							//		m_pi0_gam1_p4[1][pp] = p4Pi0gam1[i_pi0][pp];
+							//		m_pi0_gam2_p4[1][pp] = p4Pi0gam2[i_pi0][pp];
+							m_sigma0_gam_p4[1][pp] =  p4ASigma0gam[i_sigma0][pp];
+						}
+						//			m_xy[0]=Rxy_pp[i];m_z[0]=Rz_pp[i];
+						//			m_xy[1]=Rxy_km[j];m_z[1]=Rz_km[j];
+						//			m_xy[2]=Rxy_pip[t];m_z[2]=Rz_pip[t];
+						//			m_mom[0] = proton_p4.vect().mag();
+						//			m_mom[1] = kaon_p4.vect().mag();
+						//			m_mom[2] = pion_p4.vect().mag();
+						//m_flag[1]=-1;
+						m_charge[1]=-1;
+						m_ebeam[1] = m_beamE;
+						m_mbc[1]=mbc;
+						m_deltaE[1]=deltaE;
+						m_ngood[1]=iGood.size();
+						//	m_phi_p=proton_p4.vect().phi();
+						//	m_phi_k=kaon_p4.vect().phi();
+						//	m_phi_pi=pion_p4.vect().phi();
+						//	m_theta_p=proton_p4.vect().theta();
+						//	m_theta_k=kaon_p4.vect().theta();
+						//	m_theta_pi=pion_p4.vect().theta();
+						//	m_oa_ppi= proton_p4.vect().angle(pion_p4.vect());
+						//	m_oa_pk = proton_p4.vect().angle(kaon_p4.vect());
+						//	m_oa_kpi= kaon_p4.vect().angle(pion_p4.vect());
+						//	m_diphi_ppi= proton_p4.vect().phi()-pion_p4.vect().phi();
+						//	m_diphi_pk = proton_p4.vect().phi()-kaon_p4.vect().phi();
+						//	m_diphi_kpi= kaon_p4.vect().phi()-pion_p4.vect().phi();
+						m_index[1]=3;
+
+						m_lambda_mass[1] = massALmd[iASigma0lmd[i_sigma0]];
+						m_lambda_chis1[1] = chis1ALmd[iASigma0lmd[i_sigma0]];
+						m_lambda_lchue[1] = lchueALmd[iASigma0lmd[i_sigma0]];
+
+						m_sigma0_mass[1] = massASigma0[i_sigma0];
+						m_sigma01c_mass[1] = p4_sigma0.m();
+						m_sigma0_chis[1] = chisASigma0[i_sigma0];
+
+						m_tuple[1]->write();
+					}
+
 
 				}
 
@@ -1162,6 +988,181 @@ StatusCode Sigma0PipPipPim::execute(){
 
 		m_tuple[1]->write();
 	}
+
+	if(m_debug) std::cerr<<"!!!!!!!!!!!!!!!!!"<<"Enter Lambda_c +"<<"!!!!!!!!!!"<<std::endl;
+	//lambda_c + --> sigma0 pi+ pi0
+	bool have_best_lambda_cp = false;
+	for(int i_pionp1 =0; i_pionp1 < iPionp.size();i_pionp1++)
+	{
+		EvtRecTrackIterator itTrk=evtRecTrkCol->begin() + iPionp[i_pionp1];
+		RecMdcKalTrack::setPidType  (RecMdcKalTrack::pion);
+		HepLorentzVector p4_pionp1 = ((*itTrk)->mdcKalTrack())->p4(PDG::Pion);
+
+		for(int i_pionp2 = i_pionp1 + 1; i_pionp2 < iPionp.size(); i_pionp2++)
+		{
+			EvtRecTrackIterator itTrk2 =evtRecTrkCol->begin() + iPionp[i_pionp2];
+			RecMdcKalTrack::setPidType  (RecMdcKalTrack::pion);
+			HepLorentzVector p4_pionp2 = ((*itTrk2)->mdcKalTrack())->p4(PDG::Pion);
+
+			for(int i_pionm = 0; i_pionm < iPionm.size(); i_pionm++)
+			{
+				EvtRecTrackIterator itTrk3 = evtRecTrkCol->begin() + iPionm[i_pionm];
+				RecMdcKalTrack::setPidType  (RecMdcKalTrack::pion);
+				HepLorentzVector p4_pionm = ((*itTrk3)->mdcKalTrack())->p4(PDG::Pion);
+
+				for(int i_sigma0 = 0; i_sigma0 < p4Sigma01c.size(); i_sigma0++)
+				{
+					HepLorentzVector p4_sigma0 = p4Sigma01c[i_sigma0];
+
+					//for(int i_pi0 = 0; i_pi0 < p4Pi01c.size(); i_pi0++)
+
+					//if(iPi0gam1[i_pi0] == iSigma0gam[i_sigma0] || 
+					//  iPi0gam2[i_pi0] == iSigma0gam[i_sigma0]  )
+					//	continue;
+
+					int iLmd = iSigma0lmd[i_sigma0];
+					if( iLmdpp[iLmd] == iPionp[i_pionp1] ||
+							iLmdpp[iLmd] == iPionp[i_pionp2] ||  
+							iLmdpim[iLmd] == iPionm[i_pionm])
+						continue;
+
+					//HepLorentzVector p4_pi0 = p4Pi01c[i_pi0];	
+					//double check_rho = (p4_pionp + p4_pi0).m();
+					//if(Cut::Rho(check_rho)) continue;
+
+					//boost 
+					HepLorentzVector cms(0,0,0,m_ecms);
+					HepLorentzVector tot_p4= p4_pionp1 + p4_pionp2 + p4_pionm + p4_sigma0;
+					HepLorentzVector tot_p4_boost;
+					tot_p4_boost = tot_p4.boost(-0.011,0.,0.);
+					double mbc2 = m_beamE*m_beamE- tot_p4_boost.v().mag2();
+					double mbc = mbc2 > 0 ? sqrt( mbc2 ) : -10;
+					double deltaE = tot_p4_boost.t() - m_beamE;
+
+					if(m_BestCandidate)
+					{
+						if(fabs(deltaE)<tmp_De_lp)
+						{
+							have_best_lambda_cp = true;
+							cnt_Lp++;
+							tmp_De_lp=fabs(deltaE);
+
+							m_mass[0] = tot_p4.m();
+							HepLorentzVector p4_lambda = wtpLmd1s[iSigma0lmd[i_sigma0]].p(); 
+							for(int pp=0;pp<4;pp++)
+							{
+								m_fourmom[0][0][pp] = p4_sigma0[pp];
+								//m_fourmom[0][1][pp] = p4_pionp[pp];
+								//m_fourmom[0][2][pp] = p4_pi0[pp];
+								m_lambda_p4[0][pp]  = p4_lambda[pp]; 
+
+								//			m_pi0_gam1_p4[0][pp] = p4Pi0gam1[i_pi0][pp];
+								//				m_pi0_gam2_p4[0][pp] = p4Pi0gam2[i_pi0][pp];
+								m_sigma0_gam_p4[0][pp] =  p4Sigma0gam[i_sigma0][pp];
+							}
+							//				m_xy[0]=Rxy_pp[i];m_z[0]=Rz_pp[i];
+							//				m_xy[1]=Rxy_km[j];m_z[1]=Rz_km[j];
+							//				m_xy[2]=Rxy_pip[t];m_z[2]=Rz_pip[t];
+							//				m_mom[0] = proton_p4.vect().mag();
+							//				m_mom[1] = kaon_p4.vect().mag();
+							//				m_mom[2] = pion_p4.vect().mag();
+							//m_flag[0]=1;
+							m_charge[0]=1;
+							m_ebeam[0] = m_beamE;
+							m_mbc[0]=mbc;
+							m_deltaE[0]=deltaE;
+							m_ngood[0]=iGood.size();
+							//	m_phi_p=proton_p4.vect().phi();
+							//	m_phi_k=kaon_p4.vect().phi();
+							//	m_phi_pi=pion_p4.vect().phi();
+							//	m_theta_p=proton_p4.vect().theta();
+							//	m_theta_k=kaon_p4.vect().theta();
+							//	m_theta_pi=pion_p4.vect().theta();
+							//	m_oa_ppi= proton_p4.vect().angle(pion_p4.vect());
+							//	m_oa_pk = proton_p4.vect().angle(kaon_p4.vect());
+							//	m_oa_kpi= kaon_p4.vect().angle(pion_p4.vect());
+							//	m_diphi_ppi= proton_p4.vect().phi()-pion_p4.vect().phi();
+							//	m_diphi_pk = proton_p4.vect().phi()-kaon_p4.vect().phi();
+							//	m_diphi_kpi= kaon_p4.vect().phi()-pion_p4.vect().phi();
+							m_index[0]=3;
+
+							m_lambda_mass[0] = massLmd[iSigma0lmd[i_sigma0]];
+							m_lambda_chis1[0] = chis1Lmd[iSigma0lmd[i_sigma0]];
+							m_lambda_lchue[0] = lchueLmd[iSigma0lmd[i_sigma0]];
+
+							m_sigma0_mass[0] = massSigma0[i_sigma0];
+							m_sigma01c_mass[0] = p4_sigma0.m();
+							m_sigma0_chis[0] = chisSigma0[i_sigma0];
+
+						}
+					}
+					else 
+					{
+						++cnt_Lp;
+						m_mass[0] = tot_p4.m();
+						HepLorentzVector p4_lambda = wtpLmd1s[iSigma0lmd[i_sigma0]].p(); 
+						for(int pp=0;pp<4;pp++)
+						{
+							m_fourmom[0][0][pp] = p4_sigma0[pp];
+							//		m_fourmom[0][1][pp] = p4_pionp[pp];
+							//		m_fourmom[0][2][pp] = p4_pi0[pp];
+							m_lambda_p4[0][pp]  = p4_lambda[pp]; 
+
+							//		m_pi0_gam1_p4[0][pp] = p4Pi0gam1[i_pi0][pp];
+							//		m_pi0_gam2_p4[0][pp] = p4Pi0gam2[i_pi0][pp];
+							m_sigma0_gam_p4[0][pp] =  p4Sigma0gam[i_sigma0][pp];
+						}
+						//			m_xy[0]=Rxy_pp[i];m_z[0]=Rz_pp[i];
+						//			m_xy[1]=Rxy_km[j];m_z[1]=Rz_km[j];
+						//			m_xy[2]=Rxy_pip[t];m_z[2]=Rz_pip[t];
+						//			m_mom[0] = proton_p4.vect().mag();
+						//			m_mom[1] = kaon_p4.vect().mag();
+						//			m_mom[2] = pion_p4.vect().mag();
+						//m_flag[0]=1;
+						m_charge[0]=1;
+						m_ebeam[0] = m_beamE;
+						m_mbc[0]=mbc;
+						m_deltaE[0]=deltaE;
+						m_ngood[0]=iGood.size();
+						//	m_phi_p=proton_p4.vect().phi();
+						//	m_phi_k=kaon_p4.vect().phi();
+						//	m_phi_pi=pion_p4.vect().phi();
+						//	m_theta_p=proton_p4.vect().theta();
+						//	m_theta_k=kaon_p4.vect().theta();
+						//	m_theta_pi=pion_p4.vect().theta();
+						//	m_oa_ppi= proton_p4.vect().angle(pion_p4.vect());
+						//	m_oa_pk = proton_p4.vect().angle(kaon_p4.vect());
+						//	m_oa_kpi= kaon_p4.vect().angle(pion_p4.vect());
+						//	m_diphi_ppi= proton_p4.vect().phi()-pion_p4.vect().phi();
+						//	m_diphi_pk = proton_p4.vect().phi()-kaon_p4.vect().phi();
+						//	m_diphi_kpi= kaon_p4.vect().phi()-pion_p4.vect().phi();
+						m_index[0]=3;
+
+						m_lambda_mass[0] = massLmd[iSigma0lmd[i_sigma0]];
+						m_lambda_chis1[0] = chis1Lmd[iSigma0lmd[i_sigma0]];
+						m_lambda_lchue[0] = lchueLmd[iSigma0lmd[i_sigma0]];
+
+						m_sigma0_mass[0] = massSigma0[i_sigma0];
+						m_sigma01c_mass[0] = p4_sigma0.m();
+						m_sigma0_chis[0] = chisSigma0[i_sigma0];
+
+						m_tuple[0]->write();
+					}
+
+
+				}
+			}
+		}
+
+	}
+
+	if(m_BestCandidate && have_best_lambda_cp)
+	{	
+
+		m_tuple[0]->write();
+	}
+	if(m_debug) std::cerr<<"!!!!!!!!!!!!!!!!!"<<cnt_Lp<<"!!!!!!!!!!"<<std::endl;
+
 
 
 	if(m_debug) std::cerr<<"!!!!!!!!!!!!!!!!!"<<cnt_Lm<<"!!!!!!!!!!"<<std::endl;
