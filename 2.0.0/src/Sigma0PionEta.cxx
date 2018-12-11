@@ -235,7 +235,8 @@ StatusCode Sigma0PionEta::execute(){
 		m_cout_all++;
 
 		//initi
-		const int LAMBDAC_SIGMA0_PION_ETA = 11;
+		//There is no sigma0 pi+ eta in inclusive MC now
+		const int LAMBDAC_SIGMA0_PION_ETA = -1; 
 
 		m_flag[0]= -1;
 		m_flag[1]= -1;
@@ -318,8 +319,7 @@ StatusCode Sigma0PionEta::execute(){
 				int motherpdg = ((*iter_mc)->mother()).particleProperty();
 				int mmotherpdg = (((*iter_mc)->mother()).mother()).particleProperty();
 
-				//if(pdg == 4122 && mode1 == 0 && mode2 == LAMBDAC_SIGMA0_PION_ETA) //lambda_c+
-				if(pdg == 4122 && mode1 == 0 ) //lambda_c+
+				if(pdg == 4122 && mode1 == 0 && mode2 == LAMBDAC_SIGMA0_PION_ETA) //lambda_c+
 				{
 					const SmartRefVector<Event::McParticle>& gc = (*iter_mc)->daughterList();
 					for(unsigned int ii = 0; ii < gc.size(); ii++) 
@@ -336,7 +336,7 @@ StatusCode Sigma0PionEta::execute(){
 					m_flag[0] = LAMBDAC_SIGMA0_PION_ETA;
 				}
 
-				/*if((pdg == 4122 && mode1 == 0 && mode2 == 6) )
+				if((pdg == 4122 && mode1 == 0 && mode2 == 6) )
 				{
 					const SmartRefVector<Event::McParticle>& gc = (*iter_mc)->daughterList();
 					for(unsigned int ii = 0; ii < gc.size(); ii++) 
@@ -350,10 +350,9 @@ StatusCode Sigma0PionEta::execute(){
 						ndaughterAp++;
 					}// End of "gc.size() > 0" IF
 
-				}*/
+				}
 				
-				//if (pdg == -4122 && mode1 == 0 && mode3 == LAMBDAC_SIGMA0_PION_ETA) //lambda_c-
-				if (pdg == -4122 && mode1 == 1 ) //lambda_c-
+				if (pdg == -4122 && mode1 == 0 && mode3 == LAMBDAC_SIGMA0_PION_ETA) //lambda_c-
 				{
 					const SmartRefVector<Event::McParticle>& gc = (*iter_mc)->daughterList();
 					for(unsigned int ii = 0; ii < gc.size(); ii++) 
@@ -370,7 +369,7 @@ StatusCode Sigma0PionEta::execute(){
 					m_flag[1] = LAMBDAC_SIGMA0_PION_ETA;
 				}
 
-				/*if((pdg == -4122 && mode1 == 0 && mode3 == 6) )
+				if((pdg == -4122 && mode1 == 0 && mode3 == 6) )
 				{
 					const SmartRefVector<Event::McParticle>& gc = (*iter_mc)->daughterList();
 					for(unsigned int ii = 0; ii < gc.size(); ii++) 
@@ -384,10 +383,9 @@ StatusCode Sigma0PionEta::execute(){
 						ndaughterAm++;
 					}// End of "gc.size() > 0" IF
 
-				}*/
+				}
 				//mode2
-				//if(mode1 == 0 && mode2 == LAMBDAC_SIGMA0_PION_ETA  && pdg == 3212 && motherpdg == 4122) //sigma0 -> lmd gam
-				if(mode1 == 0 && mode2 == 0 && pdg == 3212 && motherpdg == 4122) //sigma0 -> lmd gam
+				if(mode1 == 0 && mode2 == LAMBDAC_SIGMA0_PION_ETA  && pdg == 3212 && motherpdg == 4122) //sigma0 -> lmd gam
 				{
 					const SmartRefVector<Event::McParticle>& gc = (*iter_mc)->daughterList();
 					for(unsigned int ii = 0; ii < gc.size(); ii++) 
@@ -403,8 +401,7 @@ StatusCode Sigma0PionEta::execute(){
 			
 				}
 
-				//if(mode1 == 0 && mode2 == LAMBDAC_SIGMA0_PION_ETA && pdg == 111 && motherpdg == 4122) //eta -> gam gam
-				if(mode1 == 0 && mode2 == 0 && pdg == 221 && motherpdg == 4122) //eta -> gam gam
+				if(mode1 == 0 && mode2 == LAMBDAC_SIGMA0_PION_ETA && pdg == 221 && motherpdg == 4122) //eta -> gam gam
 				{
 					const SmartRefVector<Event::McParticle>& gc = (*iter_mc)->daughterList();
 					for(unsigned int ii = 0; ii < gc.size(); ii++) 
@@ -420,8 +417,7 @@ StatusCode Sigma0PionEta::execute(){
 			
 				}
 
-				//if(mode1 == 0 && mode2 == LAMBDAC_SIGMA0_PION_ETA && pdg == 3122 && motherpdg == 3212 && mmotherpdg == 4122) //lmd -> p pi
-				if(mode1 == 0 && mode2 ==  0 && pdg == 3122 && motherpdg == 3212 && mmotherpdg == 4122) //lmd -> p pi
+				if(mode1 == 0 && mode2 == LAMBDAC_SIGMA0_PION_ETA && pdg == 3122 && motherpdg == 3212 && mmotherpdg == 4122) //lmd -> p pi
 				{
 					const SmartRefVector<Event::McParticle>& gc = (*iter_mc)->daughterList();
 					for(unsigned int ii = 0; ii < gc.size(); ii++) 
@@ -438,8 +434,7 @@ StatusCode Sigma0PionEta::execute(){
 				}
 
 				//mode2
-				//if(mode1 == 0 && mode3 == LAMBDAC_SIGMA0_PION_ETA && pdg == -3212 && motherpdg == -4122) //sigma0 -> lmd gam
-				if(mode1 == 1 && mode3 == 0 && pdg == -3212 && motherpdg == -4122) //sigma0 -> lmd gam
+				if(mode1 == 0 && mode3 == LAMBDAC_SIGMA0_PION_ETA && pdg == -3212 && motherpdg == -4122) //sigma0 -> lmd gam
 				{
 					const SmartRefVector<Event::McParticle>& gc = (*iter_mc)->daughterList();
 					for(unsigned int ii = 0; ii < gc.size(); ii++) 
@@ -455,8 +450,7 @@ StatusCode Sigma0PionEta::execute(){
 			
 				}
 
-				//if(mode1 == 0 && mode3 == LAMBDAC_SIGMA0_PION_ETA && pdg == 111 && motherpdg == -4122) //eta -> gam gam
-				if(mode1 == 1 && mode3 == 0 && pdg == 221 && motherpdg == -4122) //eta -> gam gam
+				if(mode1 == 0 && mode3 == LAMBDAC_SIGMA0_PION_ETA && pdg == 221 && motherpdg == -4122) //eta -> gam gam
 				{
 					const SmartRefVector<Event::McParticle>& gc = (*iter_mc)->daughterList();
 					for(unsigned int ii = 0; ii < gc.size(); ii++) 
@@ -472,8 +466,7 @@ StatusCode Sigma0PionEta::execute(){
 			
 				}
 
-				//if(mode1 == 0 && mode3 == LAMBDAC_SIGMA0_PION_ETA  && pdg == -3122 && motherpdg == -3212 && mmotherpdg == -4122) //lmd -> p pi
-				if(mode1 == 1 && mode3 == 0  && pdg == -3122 && motherpdg == -3212 && mmotherpdg == -4122) //lmd -> p pi
+				if(mode1 == 0 && mode3 == LAMBDAC_SIGMA0_PION_ETA  && pdg == -3122 && motherpdg == -3212 && mmotherpdg == -4122) //lmd -> p pi
 				{
 					const SmartRefVector<Event::McParticle>& gc = (*iter_mc)->daughterList();
 					for(unsigned int ii = 0; ii < gc.size(); ii++) 
