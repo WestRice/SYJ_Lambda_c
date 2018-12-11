@@ -27,7 +27,7 @@ class Cut{
 
 		static bool Eta(const double & m)
 		{
-			if(m > 0.530 && m < 0.565)
+			if(m > 0.50 && m < 0.56)
 			  return true;
 			else
 			  return false;
