@@ -1418,21 +1418,21 @@ bool Sigma0Pip::isGoodLambda(RecMdcKalTrack* ppTrk, RecMdcKalTrack* pimTrk, doub
 		vtxfit_s->AddVertex(0, vxpar, 0, 1);
 		bool okvs=vtxfit_s->Fit(0);
 
-		if(!okvs) return false;
+		//if(!okvs) return false;
 
 		vtxfit_s->Swim(0);
 		vtxfit_s->BuildVirtualParticle(0);
 		lmd_1chis = vtxfit_s->chisq(0);
 		//Cut
-		if(lmd_1chis >= 100)
-			return false;
+		//if(lmd_1chis >= 100)
+		//	return false;
 	
 		WTrackParameter  wvlmd = vtxfit_s->wVirtualTrack(0);
 		HepLorentzVector p4_lmd_1s=wvlmd.p();
 
 		lmd_mass = p4_lmd_1s.m();
 
-		if(!Cut::Lambda(lmd_mass)) return false;
+		//if(!Cut::Lambda(lmd_mass)) return false;
 
 		WTrackParameter wppFlmd = vtxfit_s->wtrk(0);
 		WTrackParameter wpimFlmd = vtxfit_s->wtrk(1);
@@ -1460,7 +1460,7 @@ bool Sigma0Pip::isGoodLambda(RecMdcKalTrack* ppTrk, RecMdcKalTrack* pimTrk, doub
 		vtxfit2->AddTrack(0, wvlmd);
 		vtxfit2->setVpar(vtxfit_s->vpar(0));
 		bool okv2=vtxfit2->Fit();
-		if(!okv2) return false;
+		//if(!okv2) return false;
 
 		lmd_2chis= vtxfit2->chisq();
 		swvlmd = vtxfit2->wpar();
@@ -1470,10 +1470,14 @@ bool Sigma0Pip::isGoodLambda(RecMdcKalTrack* ppTrk, RecMdcKalTrack* pimTrk, doub
 		double lmd_dle = vtxfit2->decayLengthError();
 		lmd_lchue = lmd_dl/lmd_dle;
 		
-		if(lmd_lchue > 2)
+		/*if(lmd_lchue > 2)
 			return true;
 		else
 			return false;
+			*/
+		if(!Cut::Lambda(lmd_mass)) return false;
+		else return true;
+
 }
 
 
