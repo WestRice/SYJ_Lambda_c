@@ -1,0 +1,10 @@
+#include "$MCDECAYMODESVCROOT/share/GetDecayMode.txt"
+#include "$EVENTWRITERROOT/share/jobOptions_EventWriter.txt"
+#include "$VERTEXFITROOT/share/jobOptions_VertexDbSvc.txt"
+
+ApplicationMgr.DLLs += {"SYJ_Lambda_c"};
+ApplicationMgr.TopAlg +={"Sigma0Pip"};
+
+Sigma0Pip.debug=false;
+Sigma0Pip.use1c_sigma0=true;
+Sigma0Pip.CheckTotal=true;

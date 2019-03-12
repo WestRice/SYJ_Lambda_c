@@ -1,5 +1,5 @@
-#ifndef Sigma0PipPipPim_Header
-#define Sigma0PipPipPim_Header
+#ifndef Sigma0Pip_Header
+#define Sigma0Pip_Header
 
 #include "GaudiKernel/Algorithm.h"
 //you can add oher necessary header files
@@ -14,10 +14,10 @@
 //
 using CLHEP::HepLorentzVector;
 
-class Sigma0PipPipPim:public Algorithm {
+class Sigma0Pip:public Algorithm {
 	public:
-		Sigma0PipPipPim(const std::string& name, ISvcLocator* pSvcLocator);
-		~Sigma0PipPipPim();
+		Sigma0Pip(const std::string& name, ISvcLocator* pSvcLocator);
+		~Sigma0Pip();
 		StatusCode initialize();
 		StatusCode beginRun();   
 		StatusCode execute();
@@ -43,6 +43,8 @@ class Sigma0PipPipPim:public Algorithm {
 	private:
 		int nCount_pip;
 		int nCount_pim;
+		int nCount_sigma;
+		int nCount_asigma;
 
 		int m_irun;
 		bool m_debug;
@@ -148,4 +150,4 @@ class Sigma0PipPipPim:public Algorithm {
 
 //
 
-#endif//Sigma0PipPipPim_Header
+#endif//Sigma0Pip_Header

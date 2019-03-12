@@ -1,4 +1,4 @@
-#include "SYJ_Lambda_c/Sigma0PipPipPim.h"
+#include "SYJ_Lambda_c/Sigma0Pip.h"
 #include "PDG.h"
 #include "Cut.h"
 
@@ -74,8 +74,9 @@ typedef std::vector<HepLorentzVector> Vp4;
 
 static long m_cout_all(0), m_cout_ngood(0), /*m_cout_pkpi(0),*/m_cout_skim(0);
 
+static int nCount_lmd(0), nCount_almd(0);
 
-Sigma0PipPipPim::Sigma0PipPipPim(const std::string& name, ISvcLocator* pSvcLocator):Algorithm(name,pSvcLocator){
+Sigma0Pip::Sigma0Pip(const std::string& name, ISvcLocator* pSvcLocator):Algorithm(name,pSvcLocator){
 		declareProperty("Vr0cut",   m_vr0cut=1.0);
 		declareProperty("Vz0cut",   m_vz0cut=10.0);
 		declareProperty("Probcut",   m_prob_cut=0.0);
@@ -101,17 +102,22 @@ Sigma0PipPipPim::Sigma0PipPipPim(const std::string& name, ISvcLocator* pSvcLocat
 
 		nCount_pip = 0;
 		nCount_pim = 0;
+		nCount_sigma = 0;
+		nCount_asigma = 0;
+
 }
 
-Sigma0PipPipPim::~Sigma0PipPipPim(){
+Sigma0Pip::~Sigma0Pip(){
 
 	if(m_debug) std::cerr<<"!!!!!!!!!!!!!!!!!"<<"Enter Deconstructor"<<"!!!!!!!!!!"<<std::endl;
 
 	cerr<<nCount_pip<<" "<<nCount_pim<<endl;
+	cerr<<nCount_sigma<<" "<<nCount_asigma<<endl;
+	cerr<<nCount_lmd<<" "<<nCount_almd<<endl;
 		//add your code for deconstructor
 
 }
-void Sigma0PipPipPim::addItem(int idx)
+void Sigma0Pip::addItem(int idx)
 {
 	StatusCode status;
         status = m_tuple[idx]->addItem ("run", m_run[idx]);
@@ -154,9 +160,9 @@ void Sigma0PipPipPim::addItem(int idx)
 		}
 }
 
-StatusCode Sigma0PipPipPim::initialize(){
+StatusCode Sigma0Pip::initialize(){
 		MsgStream log(msgSvc(), name());
-		log<<MSG::INFO<<"Sigma0PipPipPim::initialize()"<<endreq;
+		log<<MSG::INFO<<"Sigma0Pip::initialize()"<<endreq;
 		if(m_debug) std::cerr<<"!!!!!!!!!!!!!!!!!Enter Initialize!!!!!!!!!"<<std::endl;
 		//add your code here
 		StatusCode status;
@@ -220,19 +226,19 @@ StatusCode Sigma0PipPipPim::initialize(){
 
 }
 
-StatusCode Sigma0PipPipPim::beginRun(){
+StatusCode Sigma0Pip::beginRun(){
 	if(m_debug) std::cerr<<"!!!!!!!!!!!!!!!!!"<<"Enter beginRun"<<"!!!!!!!!!!"<<std::endl;
 		MsgStream log(msgSvc(), name());
-		log<<MSG::INFO<<"Sigma0PipPipPim::beginRun()"<<endreq;
+		log<<MSG::INFO<<"Sigma0Pip::beginRun()"<<endreq;
 		//add your code here
 		return StatusCode::SUCCESS;
 
 }
-StatusCode Sigma0PipPipPim::execute(){
+StatusCode Sigma0Pip::execute(){
 
 	if(m_debug) std::cerr<<"!!!!!!!!!!!!!!!!!"<<"Enter execute"<<"!!!!!!!!!!"<<std::endl;
 		MsgStream log(msgSvc(), name());
-		log<<MSG::INFO<<"Sigma0PipPipPim::execute()"<<endreq;
+		log<<MSG::INFO<<"Sigma0Pip::execute()"<<endreq;
 		SmartDataPtr<Event::EventHeader> eventHeader(eventSvc(),"/Event/EventHeader");
 		m_cout_all++;
 
@@ -579,7 +585,8 @@ StatusCode Sigma0PipPipPim::execute(){
 		int charge = mdcTrack->charge();
 		double vz=-10, vxy=-10;
 				
-		if(isGoodTrackForLambda(*itTrk))
+		//if(isGoodTrackForLambda(*itTrk))
+		if(true)
 		{
 			if(charge > 0)
 			{
@@ -877,23 +884,11 @@ StatusCode Sigma0PipPipPim::execute(){
 	if(m_debug) std::cerr<<"!!!!!!!!!!!!!!!!!"<<"Enter Lambda_c +"<<"!!!!!!!!!!"<<std::endl;
 	//lambda_c + --> sigma0 pi+ pi0
 	bool have_best_lambda_cp = false;
-	for(int i_pionp1 = 0; i_pionp1 < iPionp.size(); i_pionp1++)
+	for(int i_pionp = 0; i_pionp < iPionp.size(); i_pionp++)
 	{
-		EvtRecTrackIterator itTrk1 = evtRecTrkCol->begin() + iPionp[i_pionp1];
+		EvtRecTrackIterator itTrk1 = evtRecTrkCol->begin() + iPionp[i_pionp];
 		RecMdcKalTrack::setPidType  (RecMdcKalTrack::pion);
-		HepLorentzVector p4_pionp1 = ((*itTrk1)->mdcKalTrack())->p4(PDG::Pion);
-
-	for(int i_pionp2 = i_pionp1 + 1; i_pionp2 < iPionp.size(); i_pionp2++)
-	{
-		EvtRecTrackIterator itTrk2 = evtRecTrkCol->begin() + iPionp[i_pionp2];
-		RecMdcKalTrack::setPidType  (RecMdcKalTrack::pion);
-		HepLorentzVector p4_pionp2 = ((*itTrk2)->mdcKalTrack())->p4(PDG::Pion);
-
-	for(int i_pionm = 0; i_pionm < iPionm.size(); i_pionm++)
-	{
-		EvtRecTrackIterator itTrk3 = evtRecTrkCol->begin() + iPionm[i_pionm];
-		RecMdcKalTrack::setPidType  (RecMdcKalTrack::pion);
-		HepLorentzVector p4_pionm = ((*itTrk3)->mdcKalTrack())->p4(PDG::Pion);
+		HepLorentzVector p4_pionp = ((*itTrk1)->mdcKalTrack())->p4(PDG::Pion);
 
 		for(int i_sigma0 = 0; i_sigma0 < p4Sigma01c.size(); i_sigma0++)
 		{
@@ -902,9 +897,7 @@ StatusCode Sigma0PipPipPim::execute(){
 			{
 
 				int iLmd = iSigma0lmd[i_sigma0];
-				if( iLmdpp[iLmd] == iPionp[i_pionp1] ||
-					iLmdpp[iLmd] == iPionp[i_pionp2] ||
-					iLmdpim[iLmd] == iPionm[i_pionm])
+				if( iLmdpp[iLmd] == iPionp[i_pionp])
 					continue;
 
 				//double check_rho = (p4_pionp + p4_pi0).m();
@@ -912,7 +905,7 @@ StatusCode Sigma0PipPipPim::execute(){
 
 				//boost 
 				HepLorentzVector cms(0,0,0,m_ecms);
-				HepLorentzVector tot_p4= p4_pionp1 + p4_pionp2 + p4_pionm + p4_sigma0;
+				HepLorentzVector tot_p4= p4_pionp + p4_sigma0;
 				HepLorentzVector tot_p4_boost;
 				tot_p4_boost = tot_p4.boost(-0.011,0.,0.);
 				double mbc2 = m_beamE*m_beamE- tot_p4_boost.v().mag2();
@@ -1023,8 +1016,6 @@ StatusCode Sigma0PipPipPim::execute(){
 			}
 
 		}
-	}
-	}
 
 	}
 	
@@ -1035,8 +1026,12 @@ StatusCode Sigma0PipPipPim::execute(){
 	//cerr<<"+"<<" "<<iPionp.size()<<" "<<iPionm.size()<<endl;
 		m_tuple[0]->write();
 	}
-	nCount_pip += iPionp.size();
-	nCount_pim += iPionm.size();
+	nCount_pip += iPionp_loose.size();
+	nCount_pim += iPionm_loose.size();
+	nCount_sigma += p4Sigma01c.size();
+	nCount_asigma += p4ASigma01c.size();
+	nCount_lmd += iLmdpp.size();
+	nCount_almd += iLmdpm.size();
 	added = true;
 	//else
 	//	cerr<<"n+"<<endl;
@@ -1045,24 +1040,11 @@ StatusCode Sigma0PipPipPim::execute(){
 	if(m_debug) std::cerr<<"!!!!!!!!!!!!!!!!!"<<"Enter Good Lambda_c -"<<"!!!!!!!!!!"<<std::endl;
 	//lamdac- -- > Asigma0 pi- pi0
 	bool have_best_lambda_cm = false;
-	for(int i_pionm1 = 0; i_pionm1 < iPionm.size(); i_pionm1++)
+	for(int i_pionm = 0; i_pionm < iPionm.size(); i_pionm++)
 	{
-		EvtRecTrackIterator itTrk1 = evtRecTrkCol->begin() + iPionm[i_pionm1];
+		EvtRecTrackIterator itTrk1 = evtRecTrkCol->begin() + iPionm[i_pionm];
 		RecMdcKalTrack::setPidType  (RecMdcKalTrack::pion);
-		HepLorentzVector p4_pionm1 = ((*itTrk1)->mdcKalTrack())->p4(PDG::Pion);
-
-	for(int i_pionm2 = i_pionm1 + 1; i_pionm2 < iPionm.size(); i_pionm2++)
-	{
-		EvtRecTrackIterator itTrk2 = evtRecTrkCol->begin() + iPionm[i_pionm2];
-		RecMdcKalTrack::setPidType  (RecMdcKalTrack::pion);
-		HepLorentzVector p4_pionm2 = ((*itTrk2)->mdcKalTrack())->p4(PDG::Pion);
-
-	for(int i_pionp = 0; i_pionp < iPionp.size(); i_pionp++)
-	{
-		EvtRecTrackIterator itTrk3 = evtRecTrkCol->begin() + iPionp[i_pionp];
-		RecMdcKalTrack::setPidType  (RecMdcKalTrack::pion);
-		HepLorentzVector p4_pionp = ((*itTrk3)->mdcKalTrack())->p4(PDG::Pion);
-
+		HepLorentzVector p4_pionm = ((*itTrk1)->mdcKalTrack())->p4(PDG::Pion);
 
 		for(int i_sigma0 = 0; i_sigma0 < p4ASigma01c.size(); i_sigma0++)
 		{
@@ -1071,16 +1053,14 @@ StatusCode Sigma0PipPipPim::execute(){
 			{
 
 				int iLmd = iASigma0lmd[i_sigma0];
-				if( iLmdpm[iLmd] == iPionm[i_pionm1] ||
-					iLmdpm[iLmd] == iPionm[i_pionm2] ||
-					iLmdpip[iLmd] == iPionp[i_pionp])
+				if( iLmdpm[iLmd] == iPionm[i_pionm] )
 					continue;
 
 				//double check_rho = (p4_pionm + p4_pi0).m();
 				//if(Cut::Rho(check_rho)) continue;
 				//boost 
 				HepLorentzVector cms(0,0,0,m_ecms);
-				HepLorentzVector tot_p4= p4_pionm1 + p4_pionm2 + p4_pionp + p4_sigma0;
+				HepLorentzVector tot_p4= p4_pionm + p4_sigma0;
 				HepLorentzVector tot_p4_boost;
 				tot_p4_boost = tot_p4.boost(-0.011,0.,0.);
 				double mbc2 = m_beamE*m_beamE- tot_p4_boost.v().mag2();
@@ -1192,8 +1172,6 @@ StatusCode Sigma0PipPipPim::execute(){
 			}
 
 		}
-	}
-	}
 
 	}
 	
@@ -1212,17 +1190,17 @@ StatusCode Sigma0PipPipPim::execute(){
 		return StatusCode::SUCCESS;
 
 }
-StatusCode Sigma0PipPipPim::endRun(){
+StatusCode Sigma0Pip::endRun(){
 		MsgStream log(msgSvc(), name());
-		log<<MSG::INFO<<"Sigma0PipPipPim::endRun()"<<endreq;
+		log<<MSG::INFO<<"Sigma0Pip::endRun()"<<endreq;
 		//add your code here
 	if(m_debug) std::cerr<<"!!!!!!!!!!!!!!!!!"<<"Enter endRun"<<"!!!!!!!!!!"<<std::endl;
 		return StatusCode::SUCCESS;
 
 }
-StatusCode Sigma0PipPipPim::finalize(){
+StatusCode Sigma0Pip::finalize(){
 		MsgStream log(msgSvc(), name());
-		log<<MSG::INFO<<"Sigma0PipPipPim::finalize()"<<endreq;
+		log<<MSG::INFO<<"Sigma0Pip::finalize()"<<endreq;
 		cout<<"total events "<< m_cout_all <<endl;
 		cout<<"pass ngood  "<< m_cout_ngood <<endl;
 		//cout<<"pass p k pi  "<< m_cout_pkpi <<endl;
@@ -1231,7 +1209,7 @@ StatusCode Sigma0PipPipPim::finalize(){
 		return StatusCode::SUCCESS;
 }
 
-bool Sigma0PipPipPim::isGoodTrk(EvtRecTrackIterator itTrk, double &vz , double &vxy) {
+bool Sigma0Pip::isGoodTrk(EvtRecTrackIterator itTrk, double &vz , double &vxy) {
 		if ( !(*itTrk)->isMdcTrackValid() ) return false;
 		if ( !(*itTrk)->isMdcKalTrackValid() ) return false;
 		RecMdcTrack* mdcTrk = (*itTrk)->mdcTrack();
@@ -1279,7 +1257,7 @@ bool Sigma0PipPipPim::isGoodTrk(EvtRecTrackIterator itTrk, double &vz , double &
 
 
 //add your code here,for other member-functions
-bool Sigma0PipPipPim::isPronton(EvtRecTrackIterator itTrk)
+bool Sigma0Pip::isPronton(EvtRecTrackIterator itTrk)
 {
 
 		//double m_prob_cut =0.001;
@@ -1303,7 +1281,7 @@ bool Sigma0PipPipPim::isPronton(EvtRecTrackIterator itTrk)
 
 }
 
-bool Sigma0PipPipPim::isPion( EvtRecTrackIterator itTrk )
+bool Sigma0Pip::isPion( EvtRecTrackIterator itTrk )
 {
 		//double m_prob_cut =0.001;
 		if(!(*itTrk)->isMdcKalTrackValid()) return false;
@@ -1328,7 +1306,7 @@ bool Sigma0PipPipPim::isPion( EvtRecTrackIterator itTrk )
 		return true;
 
 }
-bool Sigma0PipPipPim::isKaon( EvtRecTrackIterator itTrk )
+bool Sigma0Pip::isKaon( EvtRecTrackIterator itTrk )
 {
 		//double m_prob_cut =0.001;
 		if(!(*itTrk)->isMdcKalTrackValid()) return false;
@@ -1353,7 +1331,7 @@ bool Sigma0PipPipPim::isKaon( EvtRecTrackIterator itTrk )
 }
 
 
-bool Sigma0PipPipPim::isGoodShower(EvtRecTrack* trk){
+bool Sigma0Pip::isGoodShower(EvtRecTrack* trk){
 
 	if(!trk->isEmcShowerValid()){
 		return false;
@@ -1404,7 +1382,7 @@ bool Sigma0PipPipPim::isGoodShower(EvtRecTrack* trk){
 	return true;
 }
 
-bool Sigma0PipPipPim::isGoodLambda(RecMdcKalTrack* ppTrk, RecMdcKalTrack* pimTrk, double& lmd_1chis, double& lmd_2chis, double& lmd_lchue, WTrackParameter &swvlmd, double& lmd_mass){
+bool Sigma0Pip::isGoodLambda(RecMdcKalTrack* ppTrk, RecMdcKalTrack* pimTrk, double& lmd_1chis, double& lmd_2chis, double& lmd_lchue, WTrackParameter &swvlmd, double& lmd_mass){
 		lmd_1chis=-100;
 		lmd_2chis=-100;
 		lmd_lchue =-100;
@@ -1499,7 +1477,7 @@ bool Sigma0PipPipPim::isGoodLambda(RecMdcKalTrack* ppTrk, RecMdcKalTrack* pimTrk
 }
 
 
-bool Sigma0PipPipPim::isGoodPi0(RecEmcShower *shr1,RecEmcShower *shr2,double& pi0_mass,HepLorentzVector& p4_pi0,double& pi0_chis,HepLorentzVector& p4_pi0_1c,
+bool Sigma0Pip::isGoodPi0(RecEmcShower *shr1,RecEmcShower *shr2,double& pi0_mass,HepLorentzVector& p4_pi0,double& pi0_chis,HepLorentzVector& p4_pi0_1c,
 		HepLorentzVector &p4_gam1, HepLorentzVector &p4_gam2){
 
 		Hep3Vector xorigin(0,0,0);
@@ -1547,7 +1525,7 @@ bool Sigma0PipPipPim::isGoodPi0(RecEmcShower *shr1,RecEmcShower *shr2,double& pi
 		return true;
 }
 
-bool Sigma0PipPipPim::isGoodSigma0(WTrackParameter *lmd,RecEmcShower *gammaShr,double& sigma0_mass,HepLorentzVector& p4_sigma0,double& sigma0_chis,HepLorentzVector& p4_sigma0_1c, HepLorentzVector &p4_gam){
+bool Sigma0Pip::isGoodSigma0(WTrackParameter *lmd,RecEmcShower *gammaShr,double& sigma0_mass,HepLorentzVector& p4_sigma0,double& sigma0_chis,HepLorentzVector& p4_sigma0_1c, HepLorentzVector &p4_gam){
 
 		Hep3Vector xorigin(0,0,0);
 		IVertexDbSvc*  vtxsvc;
@@ -1602,7 +1580,7 @@ bool Sigma0PipPipPim::isGoodSigma0(WTrackParameter *lmd,RecEmcShower *gammaShr,d
 		return true;
 }
 
-HepLorentzVector Sigma0PipPipPim::getP4(RecEmcShower* gTrk, Hep3Vector origin){
+HepLorentzVector Sigma0Pip::getP4(RecEmcShower* gTrk, Hep3Vector origin){
 
 		//double eraw = gTrk->energy();
 		//double phi =  gTrk->phi();
@@ -1619,7 +1597,7 @@ HepLorentzVector Sigma0PipPipPim::getP4(RecEmcShower* gTrk, Hep3Vector origin){
 }
 
 
-bool Sigma0PipPipPim::isGoodTrackForLambda(EvtRecTrack* trk){
+bool Sigma0Pip::isGoodTrackForLambda(EvtRecTrack* trk){
 
 		if( !trk->isMdcKalTrackValid()) {
 				return false;
