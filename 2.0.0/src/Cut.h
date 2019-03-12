@@ -11,7 +11,7 @@ class Cut{
 	public:
 		static bool Lambda(const double & m)
 		{
-			if(m > 1.111 && m < 1.121)
+			if(m > 1.011 && m < 1.221)
 			  return true;
 			else
 			  return false;
