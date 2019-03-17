@@ -609,7 +609,7 @@ StatusCode Sigma0PionPi0::execute(){
 	if(m_debug) std::cerr<<"!!!!!!!!!!!!!!!!!"<<"End GoodTrack"<<"!!!!!!!!!!"<<std::endl;
 	if(m_debug) std::cerr<<"ngood is "<<iGood.size()<<endl;
 
-		if(iGood.size()<3) return StatusCode::SUCCESS;
+		if(iGood.size()<1) return StatusCode::SUCCESS;
 		m_ngood[0]=iGood.size();
 		m_ngood[1]=iGood.size();
 		m_cout_ngood++;
@@ -683,9 +683,9 @@ StatusCode Sigma0PionPi0::execute(){
 		return StatusCode::SUCCESS;
 	
 	if(m_debug) std::cerr<<"!!!!!!!!!!!!!!!!!"<<"Enter  Vector Size"<<"!!!!!!!!!!"<<std::endl;
-	if(iPion.size()<2) return StatusCode::SUCCESS;
+	if(iPion.size()<1) return StatusCode::SUCCESS;
 	//if(iKaon.size()<1) return StatusCode::SUCCESS;
-	if(iProton.size()<1) return StatusCode::SUCCESS;
+	//if(iProton.size()<1) return StatusCode::SUCCESS;
 	if(m_debug) std::cerr<<"!!!!!!!!!!!!!!!!!"<<"End Vector Size"<<"!!!!!!!!!!"<<std::endl;
 		//m_cout_pkpi++;
 

@@ -618,7 +618,7 @@ StatusCode Sigma0Pip::execute(){
 	if(m_debug) std::cerr<<"!!!!!!!!!!!!!!!!!"<<"End GoodTrack"<<"!!!!!!!!!!"<<std::endl;
 	if(m_debug) std::cerr<<"ngood is "<<iGood.size()<<endl;
 
-		if(iGood.size()<3) return StatusCode::SUCCESS;
+		if(iGood.size()<1) return StatusCode::SUCCESS;
 		m_ngood[0]=iGood.size();
 		m_ngood[1]=iGood.size();
 		m_cout_ngood++;
@@ -688,13 +688,13 @@ StatusCode Sigma0Pip::execute(){
 			//cnt_good++;
 		}
 	
-	if(iGam.size() < 3 || iGam.size() > 10) 
-		return StatusCode::SUCCESS;
+	if(iGam.size() < 1 || iGam.size() > 10) 
+	//	return StatusCode::SUCCESS;
 	
 	if(m_debug) std::cerr<<"!!!!!!!!!!!!!!!!!"<<"Enter  Vector Size"<<"!!!!!!!!!!"<<std::endl;
-	if(iPion.size()<2) return StatusCode::SUCCESS;
+	if(iPion.size()<1) return StatusCode::SUCCESS;
 	//if(iKaon.size()<1) return StatusCode::SUCCESS;
-	if(iProton.size()<1) return StatusCode::SUCCESS;
+	//if(iProton.size()<1) return StatusCode::SUCCESS;
 	if(m_debug) std::cerr<<"!!!!!!!!!!!!!!!!!"<<"End Vector Size"<<"!!!!!!!!!!"<<std::endl;
 		//m_cout_pkpi++;
 
@@ -706,7 +706,7 @@ StatusCode Sigma0Pip::execute(){
 		Vp4 p4Pi01c; p4Pi01c.clear();
 		Vp4 p4Pi0gam1, p4Pi0gam2; p4Pi0gam1.clear(), p4Pi0gam2.clear();
 		int nPi0;
-	if(m_debug) std::cerr<<"!!!!!!!!!!!!!!!!!"<<"Enter Good Pi0"<<"!!!!!!!!!!"<<std::endl;
+	/*if(m_debug) std::cerr<<"!!!!!!!!!!!!!!!!!"<<"Enter Good Pi0"<<"!!!!!!!!!!"<<std::endl;
 		for(int i = 0; i < iGam.size()-1; i++) 
 		{
 			for(int j = i+1; j < iGam.size(); j++) 
@@ -738,8 +738,8 @@ StatusCode Sigma0Pip::execute(){
 		}
 
       nPi0 = iPi0gam1.size();
-      if(nPi0==0) return StatusCode::SUCCESS;
-		
+      //if(nPi0==0) return StatusCode::SUCCESS;
+	*/	
 	
 	//************** Looking for lambda *************
 	Vint iLmdpp,iLmdpim;iLmdpp.clear(),iLmdpim.clear();

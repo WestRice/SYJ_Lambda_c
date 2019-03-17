@@ -681,18 +681,18 @@ StatusCode Sigma0PipPipPim::execute(){
 			//cnt_good++;
 		}
 	
-	if(iGam.size() < 3 || iGam.size() > 10) 
+	if(iGam.size() < 1 || iGam.size() > 10) 
 		return StatusCode::SUCCESS;
 	
 	if(m_debug) std::cerr<<"!!!!!!!!!!!!!!!!!"<<"Enter  Vector Size"<<"!!!!!!!!!!"<<std::endl;
-	if(iPion.size()<2) return StatusCode::SUCCESS;
+	if(iPion.size()<3) return StatusCode::SUCCESS;
 	//if(iKaon.size()<1) return StatusCode::SUCCESS;
-	if(iProton.size()<1) return StatusCode::SUCCESS;
+	//if(iProton.size()<1) return StatusCode::SUCCESS;
 	if(m_debug) std::cerr<<"!!!!!!!!!!!!!!!!!"<<"End Vector Size"<<"!!!!!!!!!!"<<std::endl;
 		//m_cout_pkpi++;
 
 		//************* Looking for pi0 **********
-		Vint iPi0gam1,iPi0gam2;iPi0gam1.clear(),iPi0gam2.clear();
+	/*	Vint iPi0gam1,iPi0gam2;iPi0gam1.clear(),iPi0gam2.clear();
 		Vdou massPi0; massPi0.clear();
 		Vdou chisPi0; chisPi0.clear();
 		Vp4 p4Pi0; p4Pi0.clear();
@@ -733,7 +733,7 @@ StatusCode Sigma0PipPipPim::execute(){
       nPi0 = iPi0gam1.size();
       if(nPi0==0) return StatusCode::SUCCESS;
 		
-	
+*/	
 	//************** Looking for lambda *************
 	Vint iLmdpp,iLmdpim;iLmdpp.clear(),iLmdpim.clear();
 	Vdou massLmd; massLmd.clear();
