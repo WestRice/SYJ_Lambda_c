@@ -160,10 +160,10 @@ StatusCode Sigma0PipPipPim::initialize(){
 		if(m_debug) std::cerr<<"!!!!!!!!!!!!!!!!!Enter Initialize!!!!!!!!!"<<std::endl;
 		//add your code here
 		StatusCode status;
-		NTuplePtr nt1(ntupleSvc(), "FILE1/Lp");
+		NTuplePtr nt1(ntupleSvc(), "FILE3/Lp");
 		if ( nt1 ) m_tuple[0] = nt1;
 		else {
-				m_tuple[0] = ntupleSvc()->book ("FILE1/Lp", CLID_ColumnWiseTuple, "exam N-Tuple example");
+				m_tuple[0] = ntupleSvc()->book ("FILE3/Lp", CLID_ColumnWiseTuple, "exam N-Tuple example");
 				if ( m_tuple[0] )    
 				{
 				addItem(0);
@@ -174,10 +174,10 @@ StatusCode Sigma0PipPipPim::initialize(){
 				}
 		}
 
-		NTuplePtr nt2(ntupleSvc(), "FILE1/Lm");
+		NTuplePtr nt2(ntupleSvc(), "FILE3/Lm");
 		if ( nt2 ) m_tuple[1] = nt2;
 		else {
-				m_tuple[1] = ntupleSvc()->book ("FILE1/Lm", CLID_ColumnWiseTuple, "exam N-Tuple example");
+				m_tuple[1] = ntupleSvc()->book ("FILE3/Lm", CLID_ColumnWiseTuple, "exam N-Tuple example");
 				if ( m_tuple[1] )    
 				{
 				addItem(1);
@@ -190,10 +190,10 @@ StatusCode Sigma0PipPipPim::initialize(){
 
 		if(m_checktotal)
 		{
-		NTuplePtr nt_mc(ntupleSvc(), "FILE1/mc_truth");
+		NTuplePtr nt_mc(ntupleSvc(), "FILE3/mc_truth");
 		if ( nt_mc ) m_tuple_mc = nt_mc;
 		else {
-				m_tuple_mc = ntupleSvc()->book ("FILE1/mc_truth", CLID_ColumnWiseTuple, "exam N-Tuple example");
+				m_tuple_mc = ntupleSvc()->book ("FILE3/mc_truth", CLID_ColumnWiseTuple, "exam N-Tuple example");
 				if ( m_tuple_mc )    
 				{
 					status = m_tuple_mc->addItem ("run", mc_run);

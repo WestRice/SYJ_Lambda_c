@@ -651,20 +651,20 @@ StatusCode Sigma0PionEta::execute(){
 			//	} 
 			//}
 			
-			if(isPronton(itTrk))
-			{
-				iProton.push_back(iGood[i]); 
-				if(charge>0) {
-				iProtonp.push_back(iGood[i]); 
-		//		Rxy_pp.push_back(Rxy[i]);Rz_pp.push_back(Rz[i]);
-				}
-
-				else { 
-					iProtonm.push_back(iGood[i]); 
-		//			Rxy_pm.push_back(Rxy[i]);
-		//			Rz_pm.push_back(Rz[i]); 
-				}
- 			}
+//			if(isPronton(itTrk))
+//			{
+//				iProton.push_back(iGood[i]); 
+//				if(charge>0) {
+//				iProtonp.push_back(iGood[i]); 
+//		//		Rxy_pp.push_back(Rxy[i]);Rz_pp.push_back(Rz[i]);
+//				}
+//
+//				else { 
+//					iProtonm.push_back(iGood[i]); 
+//		//			Rxy_pm.push_back(Rxy[i]);
+//		//			Rz_pm.push_back(Rz[i]); 
+//				}
+// 			}
 			
 		}
 
