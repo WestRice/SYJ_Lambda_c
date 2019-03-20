@@ -500,7 +500,8 @@ StatusCode Sigma0PionEta::execute(){
 		mc_mode2 = mode2;
 		mc_mode3 = mode3;
 
-		m_ndaughterAp = ndaughterAp;
+		m_ndaughterAp[0] = ndaughterAp;
+		m_ndaughterAp[1] = ndaughterAp;
 		mc_ndaughterAp = ndaughterAp;
 
 		for ( int aa = 0; aa < ndaughterAp; aa++ ) 
@@ -518,7 +519,8 @@ StatusCode Sigma0PionEta::execute(){
 				mc_Ap_ptruth[aa][ll]=Ap_ptruth[aa][ll];
 			}
 
-		m_ndaughterAm = ndaughterAm;
+		m_ndaughterAm[0] = ndaughterAm;
+		m_ndaughterAm[1] = ndaughterAm;
 		mc_ndaughterAm = ndaughterAm;
 		
 		for ( int aa = 0; aa < ndaughterAm; aa++ ) 
