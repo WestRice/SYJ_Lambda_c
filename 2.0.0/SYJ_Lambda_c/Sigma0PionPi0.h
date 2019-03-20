@@ -79,12 +79,12 @@ class Sigma0PionPi0:public Algorithm {
 	NTuple::Item<int> m_mode1[2];
 	NTuple::Item<int> m_mode2[2];
 	NTuple::Item<int> m_mode3[2];
-	NTuple::Item<int> m_ndaughterAp;
-	NTuple::Array<int> m_Ap_id;
-	NTuple::Matrix<double> m_Ap_ptruth;
-	NTuple::Item<int> m_ndaughterAm;
-	NTuple::Array<int> m_Am_id;
-	NTuple::Matrix<double> m_Am_ptruth;
+	NTuple::Item<int> m_ndaughterAp[2];
+	NTuple::Array<int> m_Ap_id[2];
+	NTuple::Matrix<double> m_Ap_ptruth[2];
+	NTuple::Item<int> m_ndaughterAm[2];
+	NTuple::Array<int> m_Am_id[2];
+	NTuple::Matrix<double> m_Am_ptruth[2];
 	
 	NTuple::Item<int> mc_run;
 	NTuple::Item<int> mc_event;
