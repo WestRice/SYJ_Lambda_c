@@ -319,7 +319,7 @@ StatusCode Sigma0PionPi0::execute(){
 				int motherpdg = ((*iter_mc)->mother()).particleProperty();
 				int mmotherpdg = (((*iter_mc)->mother()).mother()).particleProperty();
 
-				if(pdg == 4122 && mode1 == 0 ) //lambda_c+
+				if(pdg == 4122 && mode1 == 0 && mode2 == 11) //lambda_c+
 				{
 					const SmartRefVector<Event::McParticle>& gc = (*iter_mc)->daughterList();
 					for(unsigned int ii = 0; ii < gc.size(); ii++) 
@@ -337,7 +337,7 @@ StatusCode Sigma0PionPi0::execute(){
 				}
 
 				
-				if (pdg == -4122 && mode1 == 1 ) //lambda_c-
+				if (pdg == -4122 && mode1 == 0 && mode3 == 11) //lambda_c-
 				{
 					const SmartRefVector<Event::McParticle>& gc = (*iter_mc)->daughterList();
 					for(unsigned int ii = 0; ii < gc.size(); ii++) 
@@ -354,8 +354,7 @@ StatusCode Sigma0PionPi0::execute(){
 					m_flag[1] = LAMBDAC_SIGMA0_PION_PI0;
 				}
 
-				//mode2
-				if(mode1 ==0 && mode2 == 0 && pdg == 3212 && motherpdg == 4122) //sigma0 -> lmd gam
+				if(mode1 ==0 && mode2 == 6 && pdg == 4122) 
 				{
 					const SmartRefVector<Event::McParticle>& gc = (*iter_mc)->daughterList();
 					for(unsigned int ii = 0; ii < gc.size(); ii++) 
@@ -368,43 +367,76 @@ StatusCode Sigma0PionPi0::execute(){
 					
 						ndaughterAp++;
 					}// End of "gc.size() > 0" IF
-			
+
 				}
 
-				if(mode1 == 0 && mode2 == 0 && pdg == 111 && motherpdg == 4122) //pi0 -> gam gam
+				if (pdg == -4122 && mode1 == 0 && mode3 == 6) //lambda_c-
 				{
 					const SmartRefVector<Event::McParticle>& gc = (*iter_mc)->daughterList();
 					for(unsigned int ii = 0; ii < gc.size(); ii++) 
 					{
 						if( gc[ii]->particleProperty() == -22) continue;
-					
-						Ap_id[ndaughterAp]=gc[ii]->particleProperty();
+						
+						Am_id[ndaughterAm]=gc[ii]->particleProperty();
 						for( int ll = 0; ll < 4; ll++ ) 
-							Ap_ptruth[ndaughterAp][ll]=gc[ii]->initialFourMomentum()[ll];
-					
-						ndaughterAp++;
+							Am_ptruth[ndaughterAm][ll]=gc[ii]->initialFourMomentum()[ll];
+						
+						ndaughterAm++;
 					}// End of "gc.size() > 0" IF
-			
-				}
-
-				if(mode1 == 0 && mode2 == 0 && pdg == 3122 && motherpdg == 3212 && mmotherpdg == 4122) //lmd -> p pi
-				{
-					const SmartRefVector<Event::McParticle>& gc = (*iter_mc)->daughterList();
-					for(unsigned int ii = 0; ii < gc.size(); ii++) 
-					{
-						if( gc[ii]->particleProperty() == -22) continue;
 					
-						Ap_id[ndaughterAp]=gc[ii]->particleProperty();
-						for( int ll = 0; ll < 4; ll++ ) 
-							Ap_ptruth[ndaughterAp][ll]=gc[ii]->initialFourMomentum()[ll];
-					
-						ndaughterAp++;
-					}// End of "gc.size() > 0" IF
-			
 				}
 
 				//mode2
-				if(mode1 == 1 && mode3 == 0 && pdg == -3212 && motherpdg == -4122) //sigma0 -> lmd gam
+				if(mode1 ==0 && mode2 == 11 && pdg == 3212 && motherpdg == 4122) //sigma0 -> lmd gam
+				{
+					const SmartRefVector<Event::McParticle>& gc = (*iter_mc)->daughterList();
+					for(unsigned int ii = 0; ii < gc.size(); ii++) 
+					{
+						if( gc[ii]->particleProperty() == -22) continue;
+					
+						Ap_id[ndaughterAp]=gc[ii]->particleProperty();
+						for( int ll = 0; ll < 4; ll++ ) 
+							Ap_ptruth[ndaughterAp][ll]=gc[ii]->initialFourMomentum()[ll];
+					
+						ndaughterAp++;
+					}// End of "gc.size() > 0" IF
+			
+				}
+
+				if(mode1 == 0 && mode2 == 11 && pdg == 111 && motherpdg == 4122) //pi0 -> gam gam
+				{
+					const SmartRefVector<Event::McParticle>& gc = (*iter_mc)->daughterList();
+					for(unsigned int ii = 0; ii < gc.size(); ii++) 
+					{
+						if( gc[ii]->particleProperty() == -22) continue;
+					
+						Ap_id[ndaughterAp]=gc[ii]->particleProperty();
+						for( int ll = 0; ll < 4; ll++ ) 
+							Ap_ptruth[ndaughterAp][ll]=gc[ii]->initialFourMomentum()[ll];
+					
+						ndaughterAp++;
+					}// End of "gc.size() > 0" IF
+			
+				}
+
+				if(mode1 == 0 && mode2 == 11 && pdg == 3122 && motherpdg == 3212 && mmotherpdg == 4122) //lmd -> p pi
+				{
+					const SmartRefVector<Event::McParticle>& gc = (*iter_mc)->daughterList();
+					for(unsigned int ii = 0; ii < gc.size(); ii++) 
+					{
+						if( gc[ii]->particleProperty() == -22) continue;
+					
+						Ap_id[ndaughterAp]=gc[ii]->particleProperty();
+						for( int ll = 0; ll < 4; ll++ ) 
+							Ap_ptruth[ndaughterAp][ll]=gc[ii]->initialFourMomentum()[ll];
+					
+						ndaughterAp++;
+					}// End of "gc.size() > 0" IF
+			
+				}
+
+				//mode2
+				if(mode1 == 0 && mode3 == 11 && pdg == -3212 && motherpdg == -4122) //sigma0 -> lmd gam
 				{
 					const SmartRefVector<Event::McParticle>& gc = (*iter_mc)->daughterList();
 					for(unsigned int ii = 0; ii < gc.size(); ii++) 
@@ -420,7 +452,7 @@ StatusCode Sigma0PionPi0::execute(){
 			
 				}
 
-				if(mode1 == 1 && mode3 == 0 && pdg == 111 && motherpdg == -4122) //pi0 -> gam gam
+				if(mode1 == 0 && mode3 == 11 && pdg == 111 && motherpdg == -4122) //pi0 -> gam gam
 				{
 					const SmartRefVector<Event::McParticle>& gc = (*iter_mc)->daughterList();
 					for(unsigned int ii = 0; ii < gc.size(); ii++) 
@@ -436,7 +468,7 @@ StatusCode Sigma0PionPi0::execute(){
 			
 				}
 
-				if(mode1 == 1 && mode3 == 0  && pdg == -3122 && motherpdg == -3212 && mmotherpdg == -4122) //lmd -> p pi
+				if(mode1 == 0 && mode3 == 11  && pdg == -3122 && motherpdg == -3212 && mmotherpdg == -4122) //lmd -> p pi
 				{
 					const SmartRefVector<Event::McParticle>& gc = (*iter_mc)->daughterList();
 					for(unsigned int ii = 0; ii < gc.size(); ii++) 

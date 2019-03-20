@@ -143,12 +143,12 @@ void Sigma0PionEta::addItem(int idx)
 			status = m_tuple[idx]->addItem ("mode1", m_mode1[idx]);
 			status = m_tuple[idx]->addItem ("mode2", m_mode2[idx]);
 			status = m_tuple[idx]->addItem ("mode3", m_mode3[idx]);
-			status = m_tuple[idx]->addItem ("ndaughterAp", m_ndaughterAp, 0, 15);
-			status = m_tuple[idx]->addIndexedItem ("Ap_id", m_ndaughterAp, m_Ap_id);
-			status = m_tuple[idx]->addIndexedItem ("Ap_ptruth", m_ndaughterAp, 4, m_Ap_ptruth);
-			status = m_tuple[idx]->addItem ("ndaughterAm",       m_ndaughterAm, 0, 15);
-			status = m_tuple[idx]->addIndexedItem ("Am_id", m_ndaughterAm, m_Am_id);
-			status = m_tuple[idx]->addIndexedItem ("Am_ptruth", m_ndaughterAm,  4, m_Am_ptruth);
+			status = m_tuple[idx]->addItem ("ndaughterAp", m_ndaughterAp[idx], 0, 15);
+			status = m_tuple[idx]->addIndexedItem ("Ap_id", m_ndaughterAp[idx], m_Ap_id[idx]);
+			status = m_tuple[idx]->addIndexedItem ("Ap_ptruth", m_ndaughterAp[idx], 4, m_Ap_ptruth[idx]);
+			status = m_tuple[idx]->addItem ("ndaughterAm",       m_ndaughterAm[idx], 0, 15);
+			status = m_tuple[idx]->addIndexedItem ("Am_id", m_ndaughterAm[idx], m_Am_id[idx]);
+			status = m_tuple[idx]->addIndexedItem ("Am_ptruth", m_ndaughterAm[idx],  4, m_Am_ptruth[idx]);
 		}
 }
 
@@ -505,14 +505,16 @@ StatusCode Sigma0PionEta::execute(){
 
 		for ( int aa = 0; aa < ndaughterAp; aa++ ) 
 		{
-			m_Ap_id[aa] = Ap_id[aa];
+			m_Ap_id[0][aa] = Ap_id[aa];
+			m_Ap_id[1][aa] = Ap_id[aa];
 			mc_Ap_id[aa] = Ap_id[aa];
 		}
 		
 		for ( int aa = 0; aa < ndaughterAp; aa++ ) 
 			for ( int ll = 0; ll < 4; ll++ ) 
 			{	
-				m_Ap_ptruth[aa][ll]=Ap_ptruth[aa][ll];
+				m_Ap_ptruth[0][aa][ll]=Ap_ptruth[aa][ll];
+				m_Ap_ptruth[1][aa][ll]=Ap_ptruth[aa][ll];
 				mc_Ap_ptruth[aa][ll]=Ap_ptruth[aa][ll];
 			}
 
@@ -521,7 +523,8 @@ StatusCode Sigma0PionEta::execute(){
 		
 		for ( int aa = 0; aa < ndaughterAm; aa++ ) 
 		{
-			m_Am_id[aa]=Am_id[aa];
+			m_Am_id[0][aa]=Am_id[aa];
+			m_Am_id[1][aa]=Am_id[aa];
 			mc_Am_id[aa]=Am_id[aa];
 		}
 
@@ -529,7 +532,8 @@ StatusCode Sigma0PionEta::execute(){
 		for ( int aa = 0; aa < ndaughterAm; aa++ ) 
 			for ( int ll = 0; ll < 4; ll++ ) 
 			{		
-				m_Am_ptruth[aa][ll] = Am_ptruth[aa][ll];
+				m_Am_ptruth[0][aa][ll] = Am_ptruth[aa][ll];
+				m_Am_ptruth[1][aa][ll] = Am_ptruth[aa][ll];
 				mc_Am_ptruth[aa][ll] = Am_ptruth[aa][ll];
 			}
 
