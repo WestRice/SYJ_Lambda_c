@@ -143,12 +143,12 @@ void Sigma0PionEta::addItem(int idx)
 			status = m_tuple[idx]->addItem ("mode1", m_mode1[idx]);
 			status = m_tuple[idx]->addItem ("mode2", m_mode2[idx]);
 			status = m_tuple[idx]->addItem ("mode3", m_mode3[idx]);
-			status = m_tuple[idx]->addItem ("ndaughterAp", m_ndaughterAp, 0, 15);
-			status = m_tuple[idx]->addIndexedItem ("Ap_id", m_ndaughterAp, m_Ap_id);
-			status = m_tuple[idx]->addIndexedItem ("Ap_ptruth", m_ndaughterAp, 4, m_Ap_ptruth);
-			status = m_tuple[idx]->addItem ("ndaughterAm",       m_ndaughterAm, 0, 15);
-			status = m_tuple[idx]->addIndexedItem ("Am_id", m_ndaughterAm, m_Am_id);
-			status = m_tuple[idx]->addIndexedItem ("Am_ptruth", m_ndaughterAm,  4, m_Am_ptruth);
+			status = m_tuple[idx]->addItem ("ndaughterAp", m_ndaughterAp[idx], 0, 15);
+			status = m_tuple[idx]->addIndexedItem ("Ap_id", m_ndaughterAp[idx], m_Ap_id[idx]);
+			status = m_tuple[idx]->addIndexedItem ("Ap_ptruth", m_ndaughterAp[idx], 4, m_Ap_ptruth[idx]);
+			status = m_tuple[idx]->addItem ("ndaughterAm",       m_ndaughterAm[idx], 0, 15);
+			status = m_tuple[idx]->addIndexedItem ("Am_id", m_ndaughterAm[idx], m_Am_id[idx]);
+			status = m_tuple[idx]->addIndexedItem ("Am_ptruth", m_ndaughterAm[idx],  4, m_Am_ptruth[idx]);
 		}
 }
 
@@ -236,7 +236,7 @@ StatusCode Sigma0PionEta::execute(){
 
 		//initi
 		//There is no sigma0 pi+ eta in inclusive MC now
-		const int LAMBDAC_SIGMA0_PION_ETA = -1; 
+		const int LAMBDAC_SIGMA0_PION_ETA = 1; 
 
 		m_flag[0]= -1;
 		m_flag[1]= -1;
@@ -319,25 +319,7 @@ StatusCode Sigma0PionEta::execute(){
 				int motherpdg = ((*iter_mc)->mother()).particleProperty();
 				int mmotherpdg = (((*iter_mc)->mother()).mother()).particleProperty();
 
-				if(pdg ==  3224 && mode1 == 0 && mode2 == 86) //sigma*+
-				{
-					const SmartRefVector<Event::McParticle>& gc = (*iter_mc)->daughterList();
-					for(unsigned int ii = 0; ii < gc.size(); ii++) 
-					{
-						if( gc[ii]->particleProperty() == -22) continue; 
-						Ap_id[ndaughterAp]=gc[ii]->particleProperty();
-						
-						for( int ll = 0; ll < 4; ll++ ) 
-							Ap_ptruth[ndaughterAp][ll]=gc[ii]->initialFourMomentum()[ll];
-						
-						ndaughterAp++;
-					}// End of "gc.size() > 0" IF
-
-					if(ndaughterAp == 2 && Ap_id[0] == 3212 && Ap_id[1] == 211)
-						m_flag[0] = 1;
-				}
-
-				if((pdg == 4122 && mode1 == 0 && mode2 == 6) )
+				if((pdg == 4122 && mode1 == 0 && mode2 == 0) )
 				{
 					const SmartRefVector<Event::McParticle>& gc = (*iter_mc)->daughterList();
 					for(unsigned int ii = 0; ii < gc.size(); ii++) 
@@ -352,26 +334,8 @@ StatusCode Sigma0PionEta::execute(){
 					}// End of "gc.size() > 0" IF
 
 				}
-				
-				if (pdg == -3224 && mode1 == 0 && mode3 == 86) //lambda_c-
-				{
-					const SmartRefVector<Event::McParticle>& gc = (*iter_mc)->daughterList();
-					for(unsigned int ii = 0; ii < gc.size(); ii++) 
-					{
-						if( gc[ii]->particleProperty() == -22) continue;
-						
-						Am_id[ndaughterAm]=gc[ii]->particleProperty();
-						for( int ll = 0; ll < 4; ll++ ) 
-							Am_ptruth[ndaughterAm][ll]=gc[ii]->initialFourMomentum()[ll];
-						
-						ndaughterAm++;
-					}// End of "gc.size() > 0" IF
-					
-					if(ndaughterAm == 2 && Am_id[0] == -3212 && Am_id[1] == -211)
-						m_flag[1] = 1;
-				}
 
-				if((pdg == -4122 && mode1 == 0 && mode3 == 6) )
+				if((pdg == -4122 && mode1 == 1 && mode3 == 0) )
 				{
 					const SmartRefVector<Event::McParticle>& gc = (*iter_mc)->daughterList();
 					for(unsigned int ii = 0; ii < gc.size(); ii++) 
@@ -500,28 +464,33 @@ StatusCode Sigma0PionEta::execute(){
 		mc_mode2 = mode2;
 		mc_mode3 = mode3;
 
-		m_ndaughterAp = ndaughterAp;
+		m_ndaughterAp[0] = ndaughterAp;
+		m_ndaughterAp[1] = ndaughterAp;
 		mc_ndaughterAp = ndaughterAp;
 
 		for ( int aa = 0; aa < ndaughterAp; aa++ ) 
 		{
-			m_Ap_id[aa] = Ap_id[aa];
+			m_Ap_id[0][aa] = Ap_id[aa];
+			m_Ap_id[1][aa] = Ap_id[aa];
 			mc_Ap_id[aa] = Ap_id[aa];
 		}
 		
 		for ( int aa = 0; aa < ndaughterAp; aa++ ) 
 			for ( int ll = 0; ll < 4; ll++ ) 
 			{	
-				m_Ap_ptruth[aa][ll]=Ap_ptruth[aa][ll];
+				m_Ap_ptruth[0][aa][ll]=Ap_ptruth[aa][ll];
+				m_Ap_ptruth[1][aa][ll]=Ap_ptruth[aa][ll];
 				mc_Ap_ptruth[aa][ll]=Ap_ptruth[aa][ll];
 			}
 
-		m_ndaughterAm = ndaughterAm;
+		m_ndaughterAm[0] = ndaughterAm;
+		m_ndaughterAm[1] = ndaughterAm;
 		mc_ndaughterAm = ndaughterAm;
 		
 		for ( int aa = 0; aa < ndaughterAm; aa++ ) 
 		{
-			m_Am_id[aa]=Am_id[aa];
+			m_Am_id[0][aa]=Am_id[aa];
+			m_Am_id[1][aa]=Am_id[aa];
 			mc_Am_id[aa]=Am_id[aa];
 		}
 
@@ -529,7 +498,8 @@ StatusCode Sigma0PionEta::execute(){
 		for ( int aa = 0; aa < ndaughterAm; aa++ ) 
 			for ( int ll = 0; ll < 4; ll++ ) 
 			{		
-				m_Am_ptruth[aa][ll] = Am_ptruth[aa][ll];
+				m_Am_ptruth[0][aa][ll] = Am_ptruth[aa][ll];
+				m_Am_ptruth[1][aa][ll] = Am_ptruth[aa][ll];
 				mc_Am_ptruth[aa][ll] = Am_ptruth[aa][ll];
 			}
 
