@@ -585,7 +585,7 @@ StatusCode Sigma0PionPi0::execute(){
 	if(m_debug) std::cerr<<"!!!!!!!!!!!!!!!!!"<<"End GoodTrack"<<"!!!!!!!!!!"<<std::endl;
 	if(m_debug) std::cerr<<"ngood is "<<iGood.size()<<endl;
 
-		if(iGood.size()<2) return StatusCode::SUCCESS;
+		if(iGood.size()<1) return StatusCode::SUCCESS;
 		m_ngood[0]=iGood.size();
 		m_ngood[1]=iGood.size();
 		m_cout_ngood++;
@@ -625,24 +625,24 @@ StatusCode Sigma0PionPi0::execute(){
 			//	} 
 			//}
 			
-////			if(isPronton(itTrk))
- //   		{
- //   			iProton.push_back(iGood[i]); 
- //   			if(charge>0) {
- //   			iProtonp.push_back(iGood[i]); 
- //   	//		Rxy_pp.push_back(Rxy[i]);Rz_pp.push_back(Rz[i]);
- //   			}
+			if(isPronton(itTrk))
+			{
+				iProton.push_back(iGood[i]); 
+				if(charge>0) {
+					iProtonp.push_back(iGood[i]); 
+					//		Rxy_pp.push_back(Rxy[i]);Rz_pp.push_back(Rz[i]);
+				}
 
- //   			else { 
- //   				iProtonm.push_back(iGood[i]); 
- //   	//			Rxy_pm.push_back(Rxy[i]);
- //   	//			Rz_pm.push_back(Rz[i]); 
- //   			}
- //			}
-			
+				else { 
+					iProtonm.push_back(iGood[i]); 
+					//			Rxy_pm.push_back(Rxy[i]);
+					//			Rz_pm.push_back(Rz[i]); 
+				}
+			}
+
 		}
 
-	if(m_debug) std::cerr<<"!!!!!!!!!!!!!!!!!"<<"Enter Good Shower"<<"!!!!!!!!!!"<<std::endl;
+		if(m_debug) std::cerr<<"!!!!!!!!!!!!!!!!!"<<"Enter Good Shower"<<"!!!!!!!!!!"<<std::endl;
 		for(int i=evtRecEvent->totalCharged(); i<evtRecEvent->totalTracks(); i++){
 			EvtRecTrackIterator itTrk=evtRecTrkCol->begin() + i;
 			double vz=-10, vxy=-10;
@@ -661,7 +661,7 @@ StatusCode Sigma0PionPi0::execute(){
 	if(m_debug) std::cerr<<"!!!!!!!!!!!!!!!!!"<<"Enter  Vector Size"<<"!!!!!!!!!!"<<std::endl;
 	if(iPion.size()<1) return StatusCode::SUCCESS;
 	//if(iKaon.size()<1) return StatusCode::SUCCESS;
-	//if(iProton.size()<1) return StatusCode::SUCCESS;
+	if(iProton.size()<1) return StatusCode::SUCCESS;
 	if(m_debug) std::cerr<<"!!!!!!!!!!!!!!!!!"<<"End Vector Size"<<"!!!!!!!!!!"<<std::endl;
 		//m_cout_pkpi++;
 
