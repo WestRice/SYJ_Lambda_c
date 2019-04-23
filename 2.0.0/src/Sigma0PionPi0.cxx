@@ -532,6 +532,8 @@ StatusCode Sigma0PionPi0::execute(){
 		//Vint iKaonm; iKaonm.clear();  Vint iKaonp; iKaonp.clear();
 	Vint iGam; iGam.clear();
 
+	int nProton = 0, nPion = 0; //note: we dont require proton or pion to good!
+
 		//VDouble Rxy_pm,Rz_pm; Rxy_pm.clear(); Rz_pm.clear();
 		//VDouble Rxy_km,Rz_km; Rxy_km.clear(); Rz_km.clear();
 		//VDouble Rxy_pim,Rz_pim; Rxy_pim.clear(); Rz_pim.clear();
@@ -565,8 +567,14 @@ StatusCode Sigma0PionPi0::execute(){
 				iProtonm_loose.push_back(i);
 				iPionm_loose.push_back(i);
 			}
+
+			if(isProton(itTrk))
+				++nProton;
+			else if(isPion(itTrk))
+				++nPion;
 		}
 				
+
 		if(!(isGoodTrk(itTrk, vz, vxy)))  
 
 			continue;
@@ -625,7 +633,7 @@ StatusCode Sigma0PionPi0::execute(){
 			//	} 
 			//}
 			
-			if(isPronton(itTrk))
+			if(isProton(itTrk))
 			{
 				iProton.push_back(iGood[i]); 
 				if(charge>0) {
@@ -660,8 +668,11 @@ StatusCode Sigma0PionPi0::execute(){
 	
 	if(m_debug) std::cerr<<"!!!!!!!!!!!!!!!!!"<<"Enter  Vector Size"<<"!!!!!!!!!!"<<std::endl;
 	if(iPion.size()<1) return StatusCode::SUCCESS;
-	//if(iKaon.size()<1) return StatusCode::SUCCESS;
-	if(iProton.size()<1) return StatusCode::SUCCESS;
+
+	//loose pion and proton
+	if(nPion < 2) return StatusCode::SUCCESS;
+	if(nProton < 1) return StatusCode::SUCCESS;
+
 	if(m_debug) std::cerr<<"!!!!!!!!!!!!!!!!!"<<"End Vector Size"<<"!!!!!!!!!!"<<std::endl;
 		//m_cout_pkpi++;
 
@@ -1236,7 +1247,7 @@ bool Sigma0PionPi0::isGoodTrk(EvtRecTrackIterator itTrk, double &vz , double &vx
 
 
 //add your code here,for other member-functions
-bool Sigma0PionPi0::isPronton(EvtRecTrackIterator itTrk)
+bool Sigma0PionPi0::isProton(EvtRecTrackIterator itTrk)
 {
 
 		//double m_prob_cut =0.001;
