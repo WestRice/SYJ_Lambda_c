@@ -236,7 +236,7 @@ StatusCode Sigma0PionEta::execute(){
 
 		//initi
 		//There is no sigma0 pi+ eta in inclusive MC now
-		const int LAMBDAC_SIGMA0_PION_ETA = -1; 
+		const int LAMBDAC_SIGMA0_PION_ETA = 1; 
 
 		m_flag[0]= -1;
 		m_flag[1]= -1;
@@ -319,25 +319,7 @@ StatusCode Sigma0PionEta::execute(){
 				int motherpdg = ((*iter_mc)->mother()).particleProperty();
 				int mmotherpdg = (((*iter_mc)->mother()).mother()).particleProperty();
 
-				if(pdg ==  3224 && mode1 == 0 && mode2 == 86) //sigma*+
-				{
-					const SmartRefVector<Event::McParticle>& gc = (*iter_mc)->daughterList();
-					for(unsigned int ii = 0; ii < gc.size(); ii++) 
-					{
-						if( gc[ii]->particleProperty() == -22) continue; 
-						Ap_id[ndaughterAp]=gc[ii]->particleProperty();
-						
-						for( int ll = 0; ll < 4; ll++ ) 
-							Ap_ptruth[ndaughterAp][ll]=gc[ii]->initialFourMomentum()[ll];
-						
-						ndaughterAp++;
-					}// End of "gc.size() > 0" IF
-
-					if(ndaughterAp == 2 && Ap_id[0] == 3212 && Ap_id[1] == 211)
-						m_flag[0] = 1;
-				}
-
-				if((pdg == 4122 && mode1 == 0 && mode2 == 6) )
+				if((pdg == 4122 && mode1 == 0 && mode2 == 0) )
 				{
 					const SmartRefVector<Event::McParticle>& gc = (*iter_mc)->daughterList();
 					for(unsigned int ii = 0; ii < gc.size(); ii++) 
@@ -352,26 +334,8 @@ StatusCode Sigma0PionEta::execute(){
 					}// End of "gc.size() > 0" IF
 
 				}
-				
-				if (pdg == -3224 && mode1 == 0 && mode3 == 86) //lambda_c-
-				{
-					const SmartRefVector<Event::McParticle>& gc = (*iter_mc)->daughterList();
-					for(unsigned int ii = 0; ii < gc.size(); ii++) 
-					{
-						if( gc[ii]->particleProperty() == -22) continue;
-						
-						Am_id[ndaughterAm]=gc[ii]->particleProperty();
-						for( int ll = 0; ll < 4; ll++ ) 
-							Am_ptruth[ndaughterAm][ll]=gc[ii]->initialFourMomentum()[ll];
-						
-						ndaughterAm++;
-					}// End of "gc.size() > 0" IF
-					
-					if(ndaughterAm == 2 && Am_id[0] == -3212 && Am_id[1] == -211)
-						m_flag[1] = 1;
-				}
 
-				if((pdg == -4122 && mode1 == 0 && mode3 == 6) )
+				if((pdg == -4122 && mode1 == 1 && mode3 == 0) )
 				{
 					const SmartRefVector<Event::McParticle>& gc = (*iter_mc)->daughterList();
 					for(unsigned int ii = 0; ii < gc.size(); ii++) 

@@ -25,7 +25,7 @@ class Sigma0PionPi0:public Algorithm {
     StatusCode finalize();
 
     bool isGoodTrk(EvtRecTrackIterator itTrk, double &vz, double &vxy);
-    bool isPronton(EvtRecTrackIterator itTrk);
+    bool isProton(EvtRecTrackIterator itTrk);
     bool isPion (EvtRecTrackIterator itTrk);
     bool isKaon (EvtRecTrackIterator itTrk);
     bool isGoodShower(EvtRecTrack* trk);
