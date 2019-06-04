@@ -45,6 +45,14 @@ class Cut{
 		{
 			return m > 0.62 && m < 0.93;
 		}
+
+		static bool Lambda_c(const double & m)
+		{
+			if(m > 2.0 && m < 2.5)
+			  return true;
+			else
+			  return false;
+		}
 };
 
 #endif

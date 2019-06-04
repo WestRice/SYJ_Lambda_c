@@ -35,11 +35,14 @@ class Sigma0PionPi0:public Algorithm {
                 double& lmd_1chis, double& lmd_2chis, double& lmd_lchue,
                 WTrackParameter &wvlmd, double& lmd_mass);
     //Notice that the first parameter is from member fuction isGoodLambda
-    bool isGoodSigma0(WTrackParameter* virtual_lmd_trk, RecEmcShower* gammaShr, double& sigma0_mass,HepLorentzVector& p4_sigma0,double& sigma0_chis,HepLorentzVector& p4_sigma0_1c, HepLorentzVector&);
+    bool isGoodSigma0(WTrackParameter* virtual_lmd_trk, RecEmcShower* gammaShr, double& sigma0_mass,HepLorentzVector& p4_sigma0,double& sigma0_chis,HepLorentzVector& p4_sigma0_1c, HepLorentzVector&,WTrackParameter &);
 
-    bool isGoodPi0(RecEmcShower *shr1,RecEmcShower *shr2,double& pi0_mass,HepLorentzVector& p4_pi0,double& pi0_chis,HepLorentzVector& p4_pi0_1c, HepLorentzVector&, HepLorentzVector&);
+    bool isGoodPi0(RecEmcShower *shr1,RecEmcShower *shr2,double& pi0_mass,HepLorentzVector& p4_pi0,double& pi0_chis,HepLorentzVector& p4_pi0_1c, HepLorentzVector&, HepLorentzVector&,WTrackParameter &);
 
 	bool    isGoodTrackForLambda(EvtRecTrack* trk);
+
+	bool Mass1c_Lmdc(WTrackParameter &sigma0, WTrackParameter &piTrk, WTrackParameter &pi0Trk,double& lmdc_chis,HepLorentzVector& p4_lmdc_1c);
+
   private:
 
      int m_irun;
@@ -98,6 +101,7 @@ class Sigma0PionPi0:public Algorithm {
 	NTuple::Array<int> mc_Am_id;
 	NTuple::Matrix<double> mc_Am_ptruth;
 
+    NTuple::Item<double>m_lmdc_chis[2];
     NTuple::Item<int>m_flag[2];
     NTuple::Item<int>m_charge[2];
     NTuple::Item<int>m_ngood[2];

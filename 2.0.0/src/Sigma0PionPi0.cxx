@@ -1,6 +1,7 @@
 #include "SYJ_Lambda_c/Sigma0PionPi0.h"
 #include "PDG.h"
 #include "Cut.h"
+#include <cmath>
 
 #include "McDecayModeSvc/McDecayModeSvc.h"
 #include "BestDTagSvc/BestDTagSvc.h"
@@ -120,7 +121,7 @@ void Sigma0PionPi0::addItem(int idx)
         status = m_tuple[idx]->addItem ("mass",m_mass[idx]);
         status = m_tuple[idx]->addItem ("De", m_deltaE[idx]);
         status = m_tuple[idx]->addItem ("index", m_index[idx],0,6);
-        status = m_tuple[idx]->addIndexedItem ("fourmom",m_index[idx], 4, m_fourmom[idx]);
+  //      status = m_tuple[idx]->addIndexedItem ("fourmom",m_index[idx], 4, m_fourmom[idx]);
  //       status = m_tuple[idx]->addIndexedItem ("mom",m_index[idx], m_mom[idx]);
  //       status = m_tuple[idx]->addIndexedItem ("Rxy",m_index[idx], m_xy[idx]);
  //       status = m_tuple[idx]->addIndexedItem ("Rz",m_index[idx], m_z[idx]);
@@ -135,8 +136,9 @@ void Sigma0PionPi0::addItem(int idx)
         status = m_tuple[idx]->addItem ("sigma0_gam_p4",m_index[idx], m_sigma0_gam_p4[idx]);
 
         status = m_tuple[idx]->addItem ("sigma0_mass",m_sigma0_mass[idx]);
-        status = m_tuple[idx]->addItem ("sigma01c_mass",m_sigma01c_mass[idx]);
         status = m_tuple[idx]->addItem ("sigma0_chis",m_sigma0_chis[idx]);
+
+        status = m_tuple[idx]->addItem ("lmdc_chis",m_lmdc_chis[idx]);
 
 		if(m_checktotal)
 		{
@@ -715,6 +717,7 @@ StatusCode Sigma0PionPi0::execute(){
 		Vp4 p4Pi0; p4Pi0.clear();
 		Vp4 p4Pi01c; p4Pi01c.clear();
 		Vp4 p4Pi0gam1, p4Pi0gam2; p4Pi0gam1.clear(), p4Pi0gam2.clear();
+		vector<WTrackParameter> wtpPi01c;
 		int nPi0;
 	if(m_debug) std::cerr<<"!!!!!!!!!!!!!!!!!"<<"Enter Good Pi0"<<"!!!!!!!!!!"<<std::endl;
 		for(int i = 0; i < iGam.size()-1; i++) 
@@ -731,8 +734,8 @@ StatusCode Sigma0PionPi0::execute(){
 				HepLorentzVector p4_gam1(0,0,0,0),p4_gam2(0,0,0,0);
 				double pi0_mass;
 				double pi0_chis;
-
-				if(isGoodPi0(shr1,shr2,pi0_mass,p4_pi0,pi0_chis,p4_pi0_1c, p4_gam1, p4_gam2)){
+				WTrackParameter wtp_pi0_1c;
+				if(isGoodPi0(shr1,shr2,pi0_mass,p4_pi0,pi0_chis,p4_pi0_1c, p4_gam1, p4_gam2, wtp_pi0_1c)){
 					iPi0gam1.push_back(iGam[i]);
 					iPi0gam2.push_back(iGam[j]);
 					p4Pi0gam1.push_back(p4_gam1);
@@ -742,6 +745,7 @@ StatusCode Sigma0PionPi0::execute(){
 					chisPi0.push_back(pi0_chis);
 					p4Pi0.push_back(p4_pi0);
 					p4Pi01c.push_back(p4_pi0_1c);
+					wtpPi01c.push_back(wtp_pi0_1c);
 				}
 
 			}
@@ -834,6 +838,7 @@ StatusCode Sigma0PionPi0::execute(){
 	Vint iSigma0lmd; iSigma0lmd.clear();
 	Vp4  p4Sigma01c; p4Sigma01c.clear();
 	Vp4  p4Sigma0gam; p4Sigma0gam.clear();
+	vector<WTrackParameter> wtpSigma01c; 
 	if(m_debug) std::cerr<<"!!!!!!!!!!!!!!!!!"<<"Enter Good Sigma0"<<"!!!!!!!!!!"<<std::endl;
 	for(int iLmd = 0; iLmd < iLmdpp.size(); ++iLmd)
 		for( int iShr = 0; iShr < iGam.size(); ++iShr)
@@ -843,7 +848,8 @@ StatusCode Sigma0PionPi0::execute(){
 			
 			double sigma0_mass, sigma0_chis;
 			HepLorentzVector p4_sigma0, p4_sigma01c, p4_gam;
-			if(isGoodSigma0(&wtpLmd1s[iLmd], gamShr, sigma0_mass, p4_sigma0, sigma0_chis, p4_sigma01c, p4_gam))
+			WTrackParameter wtp_sigma0_1c;
+			if(isGoodSigma0(&wtpLmd1s[iLmd], gamShr, sigma0_mass, p4_sigma0, sigma0_chis, p4_sigma01c, p4_gam, wtp_sigma0_1c))
 			{
 				massSigma0.push_back(sigma0_mass);
 				chisSigma0.push_back(sigma0_chis);
@@ -851,6 +857,7 @@ StatusCode Sigma0PionPi0::execute(){
 				p4Sigma0gam.push_back(p4_gam);
 				p4Sigma01c.push_back(p4_sigma01c);
 				iSigma0lmd.push_back(iLmd);
+				wtpSigma01c.push_back(wtp_sigma0_1c);
 			}
 		}	
 	
@@ -861,6 +868,7 @@ StatusCode Sigma0PionPi0::execute(){
 	Vint iASigma0lmd; iASigma0lmd.clear();
 	Vp4  p4ASigma01c; p4ASigma01c.clear();
 	Vp4  p4ASigma0gam; p4ASigma0gam.clear();
+	vector<WTrackParameter> wtpASigma01c; 
 
 	if(m_debug) std::cerr<<"!!!!!!!!!!!!!!!!!"<<"Enter Good anti Sigma0"<<"!!!!!!!!!!"<<std::endl;
 	for(int iALmd = 0; iALmd < iLmdpm.size(); ++iALmd)
@@ -871,7 +879,8 @@ StatusCode Sigma0PionPi0::execute(){
 			
 			double Asigma0_mass, Asigma0_chis;
 			HepLorentzVector p4_Asigma0, p4_Asigma01c, p4_gam;
-			if(isGoodSigma0(&wtpALmd1s[iALmd], gamShr, Asigma0_mass, p4_Asigma0, Asigma0_chis, p4_Asigma01c, p4_gam))
+			WTrackParameter wtp_sigma0_1c;
+			if(isGoodSigma0(&wtpALmd1s[iALmd], gamShr, Asigma0_mass, p4_Asigma0, Asigma0_chis, p4_Asigma01c, p4_gam, wtp_sigma0_1c))
 			{
 				massASigma0.push_back(Asigma0_mass);
 				chisASigma0.push_back(Asigma0_chis);
@@ -879,6 +888,7 @@ StatusCode Sigma0PionPi0::execute(){
 				p4ASigma0gam.push_back(p4_gam);
 				p4ASigma01c.push_back(p4_Asigma01c);
 				iASigma0lmd.push_back(iALmd);
+				wtpASigma01c.push_back(wtp_sigma0_1c);
 			}
 		}	
 
@@ -888,7 +898,7 @@ StatusCode Sigma0PionPi0::execute(){
 	HepLorentzVector proton_p4, kaon_p4, pion_p4;
 
 	int cnt_Lp=0, cnt_Lm=0; 
-	double tmp_De_lp=999, tmp_De_lm=999;
+	double tmp_chisq_lp = INFINITY, tmp_chisq_lm = INFINITY;
 	
 	if(m_debug) std::cerr<<"!!!!!!!!!!!!!!!!!"<<"Enter Lambda_c +"<<"!!!!!!!!!!"<<std::endl;
 	//lambda_c + --> sigma0 pi+ pi0
@@ -897,14 +907,14 @@ StatusCode Sigma0PionPi0::execute(){
 	{
 		EvtRecTrackIterator itTrk=evtRecTrkCol->begin() + iPionp[i_pionp];
 		RecMdcKalTrack::setPidType  (RecMdcKalTrack::pion);
-		//RecMdcKalTrack *kaltrk = (*itTrk)->mdcKalTrack();
-		HepLorentzVector p4_pionp = ((*itTrk)->mdcKalTrack())->p4(PDG::Pion);
+		RecMdcKalTrack *pipTrk = (*itTrk)->mdcKalTrack();
+		WTrackParameter wtp_pip(PDG::Pion, pipTrk->getZHelix(),pipTrk->getZError());
 
-		for(int i_sigma0 = 0; i_sigma0 < p4Sigma01c.size(); i_sigma0++)
+		for(int i_sigma0 = 0; i_sigma0 < wtpSigma01c.size(); i_sigma0++)
 		{
-			HepLorentzVector p4_sigma0 = p4Sigma01c[i_sigma0];
+			WTrackParameter wtp_sigma0 = wtpSigma01c[i_sigma0];
 
-			for(int i_pi0 = 0; i_pi0 < p4Pi01c.size(); i_pi0++)
+			for(int i_pi0 = 0; i_pi0 < wtpPi01c.size(); i_pi0++)
 			{
 				if(iPi0gam1[i_pi0] == iSigma0gam[i_sigma0] || 
 				   iPi0gam2[i_pi0] == iSigma0gam[i_sigma0]  )
@@ -914,13 +924,15 @@ StatusCode Sigma0PionPi0::execute(){
 				if( iLmdpp[iLmd] == iPionp[i_pionp] )
 					continue;
 
-				HepLorentzVector p4_pi0 = p4Pi01c[i_pi0];	
-				//double check_rho = (p4_pionp + p4_pi0).m();
-				//if(Cut::Rho(check_rho)) continue;
+				WTrackParameter wtp_pi0 = wtpPi01c[i_pi0];	
 
-				//boost 
+				//boost
+				double lmdc_chisq = -999;
+				HepLorentzVector tot_p4;
+				if(!Mass1c_Lmdc(wtp_sigma0, wtp_pip, wtp_pi0,lmdc_chisq, tot_p4))
+					continue;
+
 				HepLorentzVector cms(0,0,0,m_ecms);
-				HepLorentzVector tot_p4= p4_pionp + p4_sigma0 + p4_pi0;
 				HepLorentzVector tot_p4_boost;
 				tot_p4_boost = tot_p4.boost(-0.011,0.,0.);
 				double mbc2 = m_beamE*m_beamE- tot_p4_boost.v().mag2();
@@ -929,20 +941,19 @@ StatusCode Sigma0PionPi0::execute(){
 				
 				if(m_BestCandidate)
 				{
-					if(fabs(deltaE)<tmp_De_lp)
+					if(fabs(lmdc_chisq)<tmp_chisq_lp)
 					{
 						have_best_lambda_cp = true;
 						cnt_Lp++;
-						tmp_De_lp=fabs(deltaE);
+						tmp_chisq_lp=fabs(lmdc_chisq);
+
+						m_lmdc_chis[0] = lmdc_chisq;
 						
 						m_mass[0] = tot_p4.m();
 						HepLorentzVector p4_lambda = wtpLmd1s[iSigma0lmd[i_sigma0]].p(); 
 						for(int pp=0;pp<4;pp++)
 						{
-							m_fourmom[0][0][pp] = p4_sigma0[pp];
-							m_fourmom[0][1][pp] = p4_pionp[pp];
-							m_fourmom[0][2][pp] = p4_pi0[pp];
-							m_lambda_p4[0][pp]  = p4_lambda[pp]; 
+							m_lambda_p4[0][pp] = p4_lambda[pp];
 
 							m_pi0_gam1_p4[0][pp] = p4Pi0gam1[i_pi0][pp];
 							m_pi0_gam2_p4[0][pp] = p4Pi0gam2[i_pi0][pp];
@@ -979,7 +990,6 @@ StatusCode Sigma0PionPi0::execute(){
 						m_lambda_lchue[0] = lchueLmd[iSigma0lmd[i_sigma0]];
 
 						m_sigma0_mass[0] = massSigma0[i_sigma0];
-						m_sigma01c_mass[0] = p4_sigma0.m();
 						m_sigma0_chis[0] = chisSigma0[i_sigma0];
 
 					}
@@ -987,13 +997,11 @@ StatusCode Sigma0PionPi0::execute(){
 				else 
 				{
 					++cnt_Lp;
+					m_lmdc_chis[0] = lmdc_chisq;
 					m_mass[0] = tot_p4.m();
 					HepLorentzVector p4_lambda = wtpLmd1s[iSigma0lmd[i_sigma0]].p(); 
 					for(int pp=0;pp<4;pp++)
 					{
-						m_fourmom[0][0][pp] = p4_sigma0[pp];
-						m_fourmom[0][1][pp] = p4_pionp[pp];
-						m_fourmom[0][2][pp] = p4_pi0[pp];
 						m_lambda_p4[0][pp]  = p4_lambda[pp]; 
 
 						m_pi0_gam1_p4[0][pp] = p4Pi0gam1[i_pi0][pp];
@@ -1031,7 +1039,6 @@ StatusCode Sigma0PionPi0::execute(){
 					m_lambda_lchue[0] = lchueLmd[iSigma0lmd[i_sigma0]];
 
 					m_sigma0_mass[0] = massSigma0[i_sigma0];
-					m_sigma01c_mass[0] = p4_sigma0.m();
 					m_sigma0_chis[0] = chisSigma0[i_sigma0];
 					
 					m_tuple[0]->write();
@@ -1052,18 +1059,18 @@ StatusCode Sigma0PionPi0::execute(){
 	if(m_debug) std::cerr<<"!!!!!!!!!!!!!!!!!"<<"Enter Good Lambda_c -"<<"!!!!!!!!!!"<<std::endl;
 	//lamdac- -- > Asigma0 pi- pi0
 	bool have_best_lambda_cm = false;
-	for(int i_pionm = 0; i_pionm < iPionm.size(); i_pionm++)
+	for(int i_pionm=0;i_pionm<iPionm.size();i_pionm++)
 	{
 		EvtRecTrackIterator itTrk=evtRecTrkCol->begin() + iPionm[i_pionm];
 		RecMdcKalTrack::setPidType  (RecMdcKalTrack::pion);
-		//RecMdcKalTrack *kaltrk = (*itTrk)->mdcKalTrack();
-		HepLorentzVector p4_pionm = ((*itTrk)->mdcKalTrack())->p4(PDG::Pion);
+		RecMdcKalTrack *pimTrk = (*itTrk)->mdcKalTrack();
+		WTrackParameter wtp_pim(PDG::Pion, pimTrk->getZHelix(),pimTrk->getZError());
 
-		for(int i_sigma0 = 0; i_sigma0 < p4ASigma01c.size(); i_sigma0++)
+		for(int i_sigma0 = 0; i_sigma0 < wtpASigma01c.size(); i_sigma0++)
 		{
-			HepLorentzVector p4_sigma0 = p4ASigma01c[i_sigma0];
+			WTrackParameter wtp_sigma0 = wtpASigma01c[i_sigma0];
 
-			for(int i_pi0 = 0; i_pi0 < p4Pi01c.size(); i_pi0++)
+			for(int i_pi0 = 0; i_pi0 < wtpPi01c.size(); i_pi0++)
 			{
 				if(iPi0gam1[i_pi0] == iASigma0gam[i_sigma0] || 
 				   iPi0gam2[i_pi0] == iASigma0gam[i_sigma0]  )
@@ -1073,12 +1080,15 @@ StatusCode Sigma0PionPi0::execute(){
 				if( iLmdpm[iLmd] == iPionm[i_pionm] )
 					continue;
 
-				HepLorentzVector p4_pi0 = p4Pi01c[i_pi0];	
-				//double check_rho = (p4_pionm + p4_pi0).m();
-				//if(Cut::Rho(check_rho)) continue;
-				//boost 
+				WTrackParameter wtp_pi0 = wtpPi01c[i_pi0];	
+
+				//boost
+				double lmdc_chisq = -999;
+				HepLorentzVector tot_p4;
+				if(!Mass1c_Lmdc(wtp_sigma0, wtp_pim, wtp_pi0,lmdc_chisq, tot_p4))
+					continue;
+
 				HepLorentzVector cms(0,0,0,m_ecms);
-				HepLorentzVector tot_p4= p4_pionm + p4_sigma0 + p4_pi0;
 				HepLorentzVector tot_p4_boost;
 				tot_p4_boost = tot_p4.boost(-0.011,0.,0.);
 				double mbc2 = m_beamE*m_beamE- tot_p4_boost.v().mag2();
@@ -1087,25 +1097,23 @@ StatusCode Sigma0PionPi0::execute(){
 				
 				if(m_BestCandidate)
 				{
-					if(fabs(deltaE)<tmp_De_lm)
+					if(fabs(lmdc_chisq)<tmp_chisq_lm)
 					{
 						have_best_lambda_cm = true;
 						cnt_Lm++;
-						tmp_De_lm=fabs(deltaE);
+						tmp_chisq_lm=fabs(lmdc_chisq);
 						
+						m_lmdc_chis[1] = lmdc_chisq;
+
 						m_mass[1] = tot_p4.m();
 						HepLorentzVector p4_lambda = wtpALmd1s[iASigma0lmd[i_sigma0]].p(); 
 						for(int pp=0;pp<4;pp++)
 						{
-							m_fourmom[1][0][pp] = p4_sigma0[pp];
-							m_fourmom[1][1][pp] = p4_pionm[pp];
-							m_fourmom[1][2][pp] = p4_pi0[pp];
-							m_lambda_p4[1][pp]  = p4_lambda[pp]; 
+							m_lambda_p4[1][pp] = p4_lambda[pp];
 
 							m_pi0_gam1_p4[1][pp] = p4Pi0gam1[i_pi0][pp];
 							m_pi0_gam2_p4[1][pp] = p4Pi0gam2[i_pi0][pp];
 							m_sigma0_gam_p4[1][pp] =  p4ASigma0gam[i_sigma0][pp];
-							
 						}
 		//				m_xy[0]=Rxy_pp[i];m_z[0]=Rz_pp[i];
 		//				m_xy[1]=Rxy_km[j];m_z[1]=Rz_km[j];
@@ -1113,7 +1121,7 @@ StatusCode Sigma0PionPi0::execute(){
 		//				m_mom[0] = proton_p4.vect().mag();
 		//				m_mom[1] = kaon_p4.vect().mag();
 		//				m_mom[2] = pion_p4.vect().mag();
-						//m_flag[1]=-1;
+						//m_flag[0]=1;
 						m_charge[1]=-1;
 						m_ebeam[1] = m_beamE;
 						m_mbc[1]=mbc;
@@ -1138,7 +1146,6 @@ StatusCode Sigma0PionPi0::execute(){
 						m_lambda_lchue[1] = lchueALmd[iASigma0lmd[i_sigma0]];
 
 						m_sigma0_mass[1] = massASigma0[i_sigma0];
-						m_sigma01c_mass[1] = p4_sigma0.m();
 						m_sigma0_chis[1] = chisASigma0[i_sigma0];
 
 					}
@@ -1147,14 +1154,10 @@ StatusCode Sigma0PionPi0::execute(){
 				{
 					++cnt_Lm;
 					m_mass[1] = tot_p4.m();
-					HepLorentzVector p4_lambda = wtpALmd1s[iASigma0lmd[i_sigma0]].p(); 
+					m_lmdc_chis[1] = lmdc_chisq;
+					HepLorentzVector p4_lambda = wtpLmd1s[iASigma0lmd[i_sigma0]].p(); 
 					for(int pp=0;pp<4;pp++)
 					{
-						m_fourmom[1][0][pp] = p4_sigma0[pp];
-						m_fourmom[1][1][pp] = p4_pionm[pp];
-						m_fourmom[1][2][pp] = p4_pi0[pp];
-						m_lambda_p4[1][pp]  = p4_lambda[pp]; 
-
 						m_pi0_gam1_p4[1][pp] = p4Pi0gam1[i_pi0][pp];
 						m_pi0_gam2_p4[1][pp] = p4Pi0gam2[i_pi0][pp];
 						m_sigma0_gam_p4[1][pp] =  p4ASigma0gam[i_sigma0][pp];
@@ -1165,7 +1168,7 @@ StatusCode Sigma0PionPi0::execute(){
 		//			m_mom[0] = proton_p4.vect().mag();
 		//			m_mom[1] = kaon_p4.vect().mag();
 		//			m_mom[2] = pion_p4.vect().mag();
-					//m_flag[1]=-1;
+					//m_flag[0]=1;
 					m_charge[1]=-1;
 					m_ebeam[1] = m_beamE;
 					m_mbc[1]=mbc;
@@ -1190,7 +1193,6 @@ StatusCode Sigma0PionPi0::execute(){
 					m_lambda_lchue[1] = lchueALmd[iASigma0lmd[i_sigma0]];
 
 					m_sigma0_mass[1] = massASigma0[i_sigma0];
-					m_sigma01c_mass[1] = p4_sigma0.m();
 					m_sigma0_chis[1] = chisASigma0[i_sigma0];
 					
 					m_tuple[1]->write();
@@ -1435,6 +1437,7 @@ bool Sigma0PionPi0::isGoodLambda(RecMdcKalTrack* ppTrk, RecMdcKalTrack* pimTrk, 
 
 		//******primary vertex fit
 		vtxfit_s->init();
+		vtxfit_s->setChisqCut(200);
 		vtxfit_s->AddTrack(0, wvpplmdTrk);
 		vtxfit_s->AddTrack(1, wvpimlmdTrk);
 		vtxfit_s->AddVertex(0, vxpar, 0, 1);
@@ -1446,8 +1449,8 @@ bool Sigma0PionPi0::isGoodLambda(RecMdcKalTrack* ppTrk, RecMdcKalTrack* pimTrk, 
 		vtxfit_s->BuildVirtualParticle(0);
 		lmd_1chis = vtxfit_s->chisq(0);
 		//Cut
-		if(lmd_1chis >= 100)
-			return false;
+		//if(lmd_1chis >= 100)
+		//	return false;
 	
 		WTrackParameter  wvlmd = vtxfit_s->wVirtualTrack(0);
 		HepLorentzVector p4_lmd_1s=wvlmd.p();
@@ -1478,6 +1481,7 @@ bool Sigma0PionPi0::isGoodLambda(RecMdcKalTrack* ppTrk, RecMdcKalTrack* pimTrk, 
 		primaryVpar.setVx(newvx);
 		primaryVpar.setEvx(newEvx);
 		vtxfit2->init();
+		vtxfit2->setChisqCut(200);
 		vtxfit2->setPrimaryVertex(primaryVpar);
 		vtxfit2->AddTrack(0, wvlmd);
 		vtxfit2->setVpar(vtxfit_s->vpar(0));
@@ -1500,7 +1504,7 @@ bool Sigma0PionPi0::isGoodLambda(RecMdcKalTrack* ppTrk, RecMdcKalTrack* pimTrk, 
 
 
 bool Sigma0PionPi0::isGoodPi0(RecEmcShower *shr1,RecEmcShower *shr2,double& pi0_mass,HepLorentzVector& p4_pi0,double& pi0_chis,HepLorentzVector& p4_pi0_1c,
-		HepLorentzVector &p4_gam1, HepLorentzVector &p4_gam2){
+		HepLorentzVector &p4_gam1, HepLorentzVector &p4_gam2, WTrackParameter &pi0Trk){
 
 		Hep3Vector xorigin(0,0,0);
 		IVertexDbSvc*  vtxsvc;
@@ -1527,6 +1531,7 @@ bool Sigma0PionPi0::isGoodPi0(RecEmcShower *shr1,RecEmcShower *shr2,double& pi0_
 
 		KalmanKinematicFit * kmfit = KalmanKinematicFit::instance();
 		kmfit->init();
+		kmfit->setChisqCut(200);
 		kmfit->setIterNumber(5);
 		kmfit->AddTrack(0, 0.0, shr1);
 		kmfit->AddTrack(1, 0.0, shr2);
@@ -1537,17 +1542,18 @@ bool Sigma0PionPi0::isGoodPi0(RecEmcShower *shr1,RecEmcShower *shr2,double& pi0_
 
 		kmfit->BuildVirtualParticle(0);
 		pi0_chis = kmfit->chisq(0);
-		if(pi0_chis>100) return false;
+//		if(pi0_chis>100) return false;
 
 		p4_gam1 = kmfit->pfit(0);
 		p4_gam2 = kmfit->pfit(1);
 
 		p4_pi0_1c=kmfit->pfit(0)+kmfit->pfit(1);
+		pi0Trk = kmfit->wVirtualTrack(0);
 
 		return true;
 }
 
-bool Sigma0PionPi0::isGoodSigma0(WTrackParameter *lmd,RecEmcShower *gammaShr,double& sigma0_mass,HepLorentzVector& p4_sigma0,double& sigma0_chis,HepLorentzVector& p4_sigma0_1c, HepLorentzVector &p4_gam){
+bool Sigma0PionPi0::isGoodSigma0(WTrackParameter *lmd,RecEmcShower *gammaShr,double& sigma0_mass,HepLorentzVector& p4_sigma0,double& sigma0_chis,HepLorentzVector& p4_sigma0_1c, HepLorentzVector &p4_gam, WTrackParameter &wtp_sigma0_1c){
 
 		Hep3Vector xorigin(0,0,0);
 		IVertexDbSvc*  vtxsvc;
@@ -1584,6 +1590,7 @@ bool Sigma0PionPi0::isGoodSigma0(WTrackParameter *lmd,RecEmcShower *gammaShr,dou
 
 		KalmanKinematicFit * kmfit = KalmanKinematicFit::instance();
 		kmfit->init();
+		kmfit->setChisqCut(200);
 		kmfit->setIterNumber(5);
 		kmfit->AddTrack(0, *lmd);
 		kmfit->AddTrack(1, 0.0, gammaShr);
@@ -1594,10 +1601,41 @@ bool Sigma0PionPi0::isGoodSigma0(WTrackParameter *lmd,RecEmcShower *gammaShr,dou
 
 		kmfit->BuildVirtualParticle(0);
 		sigma0_chis = kmfit->chisq(0);
-		if(sigma0_chis>100) return false;
+		//if(sigma0_chis>100) return false;
 		
 		p4_gam = kmfit->pfit(1);
 		p4_sigma0_1c = kmfit->pfit(0)+kmfit->pfit(1);
+		wtp_sigma0_1c = kmfit->wVirtualTrack(0);
+
+		return true;
+}
+
+bool Sigma0PionPi0::Mass1c_Lmdc(WTrackParameter &sigma0, WTrackParameter &piTrk, WTrackParameter &pi0Trk,double& lmdc_chis,HepLorentzVector& p4_lmdc_1c){
+		lmdc_chis=-100;
+
+		HepLorentzVector p4_Lab(0.011*m_ecms,0,0,m_ecms);
+		HepLorentzVector p4_lmdc = sigma0.p() + piTrk.p() + pi0Trk.p();
+		double lmdc_mass = p4_lmdc.m();
+
+		if(!Cut::Lambda_c(lmdc_mass)) return false;
+
+		KalmanKinematicFit * kmfit = KalmanKinematicFit::instance();
+		kmfit->init();
+		kmfit->setChisqCut(INFINITY);
+		kmfit->setIterNumber(5);
+		kmfit->AddTrack(0, sigma0);
+		kmfit->AddTrack(1, piTrk);
+		kmfit->AddTrack(2, pi0Trk);
+		kmfit->AddMissTrack(3, PDG::Lambda_c);
+		kmfit->AddFourMomentum(0, p4_Lab);
+
+		bool olmdq =kmfit->Fit(0);
+		if(!olmdq) return false;
+
+		kmfit->BuildVirtualParticle(0);
+		lmdc_chis = kmfit->chisq(0);
+		
+		p4_lmdc_1c = kmfit->pfit(0)+kmfit->pfit(1) + kmfit->pfit(2);
 
 		return true;
 }
