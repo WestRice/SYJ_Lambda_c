@@ -3,8 +3,8 @@
 #include "$VERTEXFITROOT/share/jobOptions_VertexDbSvc.txt"
 
 ApplicationMgr.DLLs += {"SYJ_Lambda_c"};
-ApplicationMgr.TopAlg +={"Sigma0PionPi0"};
+ApplicationMgr.TopAlg +={"SigmapPi0Pi0"};
 
-Sigma0PionPi0.debug=false;
-Sigma0PionPi0.BestCandidate=false;
-Sigma0PionPi0.use1c_sigma0=true;
+SigmapPi0Pi0.debug=false;
+SigmapPi0Pi0.BestCandidate=false;
+SigmapPi0Pi0.use1c_sigma0=true;

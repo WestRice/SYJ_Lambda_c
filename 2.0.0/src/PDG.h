@@ -23,5 +23,7 @@ namespace PDG{
 
 		const double Lambda		= 1.115683*GeV;
 		const double Sigma0		= 1.19264*GeV;
+
+		const double Sigmap		= 1.18937*GeV;
 };
 #endif

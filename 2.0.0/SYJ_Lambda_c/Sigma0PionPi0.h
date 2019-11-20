@@ -28,7 +28,7 @@ class Sigma0PionPi0:public Algorithm {
     bool isProton(EvtRecTrackIterator itTrk);
     bool isPion (EvtRecTrackIterator itTrk);
     bool isKaon (EvtRecTrackIterator itTrk);
-    bool isGoodShower(EvtRecTrack* trk);
+    bool isGoodShower(EvtRecTrack* trk, double &);
 
     // Not Lambda_c !!!!
     bool isGoodLambda(RecMdcKalTrack* ppTrk, RecMdcKalTrack* pimTrk, 
@@ -74,21 +74,29 @@ class Sigma0PionPi0:public Algorithm {
     //NTuple::Array<int>m_motheridx;
     
 //Because there are Lambda_c+ and Lambda_c- thus we make it twice( 0 for lambda_c+ and 1 for lambda_c-)
-    NTuple::Tuple* m_tuple[2];   
+    NTuple::Tuple* m_tuple;   
 	NTuple::Tuple *m_tuple_mc;
-    NTuple::Item<int> m_run[2];
-    NTuple::Item<int> m_event[2];
+    NTuple::Item<int> m_run;
+    NTuple::Item<int> m_event;
+    NTuple::Item<int>m_flag;
+    NTuple::Item<int>m_index;
 
-	NTuple::Item<int> m_mode1[2];
-	NTuple::Item<int> m_mode2[2];
-	NTuple::Item<int> m_mode3[2];
-	NTuple::Item<int> m_ndaughterAp[2];
-	NTuple::Array<int> m_Ap_id[2];
-	NTuple::Matrix<double> m_Ap_ptruth[2];
-	NTuple::Item<int> m_ndaughterAm[2];
-	NTuple::Array<int> m_Am_id[2];
-	NTuple::Matrix<double> m_Am_ptruth[2];
-	
+	NTuple::Item<int> m_mode1;
+	NTuple::Item<int> m_mode2;
+	NTuple::Item<int> m_mode3;
+	NTuple::Item<int> m_ndaughterAp;
+	NTuple::Array<int> m_Ap_id;
+	NTuple::Matrix<double> m_Ap_ptruth;
+	NTuple::Item<int> m_ndaughterAm;
+	NTuple::Array<int> m_Am_id;
+	NTuple::Matrix<double> m_Am_ptruth;
+	NTuple::Item<int> m_idxmc_p;
+	NTuple::Item<int> m_idxmc_m;
+	NTuple::Array<int> m_pdgid_p;
+	NTuple::Array<int> m_motheridx_p;
+	NTuple::Array<int> m_pdgid_m;
+	NTuple::Array<int> m_motheridx_m;
+
 	NTuple::Item<int> mc_run;
 	NTuple::Item<int> mc_event;
 	NTuple::Item<int> mc_mode1;
@@ -101,48 +109,34 @@ class Sigma0PionPi0:public Algorithm {
 	NTuple::Array<int> mc_Am_id;
 	NTuple::Matrix<double> mc_Am_ptruth;
 
-    NTuple::Item<double>m_lmdc_chis[2];
-    NTuple::Item<int>m_flag[2];
-    NTuple::Item<int>m_charge[2];
-    NTuple::Item<int>m_ngood[2];
-    NTuple::Item<double>m_mass[2];
-    NTuple::Item<double>m_ebeam[2];
-    NTuple::Item<double>m_mbc[2];
-    NTuple::Item<double>m_deltaE[2];
-    NTuple::Item<int>m_index[2];
-    NTuple::Matrix<double>m_fourmom[2];
-  //  NTuple::Array<double>m_xy[2];
-  //  NTuple::Array<double>m_mom[2];
-  //  NTuple::Array<double>m_z[2];
-    
-    NTuple::Array<double> m_lambda_p4[2];
-    NTuple::Item<double>  m_lambda_mass[2];
-    NTuple::Item<double>  m_lambda_chis1[2];
-    NTuple::Item<double>  m_lambda_lchue[2];
-    
-    NTuple::Array<double> m_pi0_gam1_p4[2];
-    NTuple::Array<double> m_pi0_gam2_p4[2];
-    NTuple::Array<double> m_sigma0_gam_p4[2];
+	NTuple::Array<int>m_charge;
+	NTuple::Item<int>m_ngood;
+	NTuple::Array<double>m_mass;
+	NTuple::Array<double>m_ebeam;
+	NTuple::Array<double>m_mbc;
+	NTuple::Array<double>m_deltaE;
+	NTuple::Array<double>m_deltaE_lmd_pip_pi0;
 
-    NTuple::Item<double> m_sigma0_mass[2];
-    NTuple::Item<double> m_sigma01c_mass[2];
-    NTuple::Item<double> m_sigma0_chis[2];
-    //NTuple::Item<double>m_oa_ppi[2];
-    //NTuple::Item<double>m_oa_pk[2];
-    //NTuple::Item<double>m_oa_kpi[2];
-    //NTuple::Item<double>m_diphi_ppi[2];
-    //NTuple::Item<double>m_diphi_pk[2];
-    //NTuple::Item<double>m_diphi_kpi[2];
-    //NTuple::Item<double>m_phi_p[2];
-    //NTuple::Item<double>m_phi_k[2];
-    //NTuple::Item<double>m_phi_pi[2];
-    //NTuple::Item<double>m_theta_p[2];
-    //NTuple::Item<double>m_theta_k[2];
-    //NTuple::Item<double>m_theta_pi[2];
+	NTuple::Array<double> m_lambda_p4;
+	NTuple::Array<double>  m_lambda_mass;
+	NTuple::Array<double>  m_lambda_chis1;
+	NTuple::Array<double>  m_lambda_lchue;
 
-    void addItem(int idx);
+	NTuple::Array<double>  m_lmdc_chis;
 
-    HepLorentzVector getP4(RecEmcShower *gTrk, Hep3Vector origin);
+	NTuple::Matrix<double> m_pi0_gam1_p4;
+	NTuple::Matrix<double> m_pi0_gam2_p4;
+	NTuple::Matrix<double> m_sigma0_gam_p4;
+	NTuple::Array<double>  m_ang_gam_antiproton;
+
+	NTuple::Array<double> m_sigma0_mass;
+	NTuple::Array<double> m_sigma0_chis;
+
+	NTuple::Array<double> m_pi0_chis;
+
+	void addItem();
+
+	HepLorentzVector getP4(RecEmcShower *gTrk, Hep3Vector origin);
   protected:
 
 };

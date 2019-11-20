@@ -1,5 +1,5 @@
-#ifndef Sigma0PionEta_Header
-#define Sigma0PionEta_Header
+#ifndef SigmapPi0Pi0_Header
+#define SigmapPi0Pi0_Header
 
 #include "GaudiKernel/Algorithm.h"
 //you can add oher necessary header files
@@ -14,10 +14,10 @@
 //
 using CLHEP::HepLorentzVector;
 
-class Sigma0PionEta:public Algorithm {
+class SigmapPi0Pi0:public Algorithm {
   public:
-    Sigma0PionEta(const std::string& name, ISvcLocator* pSvcLocator);
-    ~Sigma0PionEta();
+    SigmapPi0Pi0(const std::string& name, ISvcLocator* pSvcLocator);
+    ~SigmapPi0Pi0();
     StatusCode initialize();
     StatusCode beginRun();   
     StatusCode execute();
@@ -28,7 +28,7 @@ class Sigma0PionEta:public Algorithm {
     bool isProton(EvtRecTrackIterator itTrk);
     bool isPion (EvtRecTrackIterator itTrk);
     bool isKaon (EvtRecTrackIterator itTrk);
-    bool isGoodShower(EvtRecTrack* trk);
+    bool isGoodShower(EvtRecTrack* trk, double &);
 
     // Not Lambda_c !!!!
     bool isGoodLambda(RecMdcKalTrack* ppTrk, RecMdcKalTrack* pimTrk, 
@@ -37,11 +37,11 @@ class Sigma0PionEta:public Algorithm {
     //Notice that the first parameter is from member fuction isGoodLambda
     bool isGoodSigma0(WTrackParameter* virtual_lmd_trk, RecEmcShower* gammaShr, double& sigma0_mass,HepLorentzVector& p4_sigma0,double& sigma0_chis,HepLorentzVector& p4_sigma0_1c, HepLorentzVector&,WTrackParameter &);
 
-    bool isGoodEta(RecEmcShower *shr1,RecEmcShower *shr2,double& eta_mass,HepLorentzVector& p4_eta,double& eta_chis,HepLorentzVector& p4_eta_1c, HepLorentzVector&, HepLorentzVector&,WTrackParameter &);
+    bool isGoodPi0(RecEmcShower *shr1,RecEmcShower *shr2,double& pi0_mass,HepLorentzVector& p4_pi0,double& pi0_chis,HepLorentzVector& p4_pi0_1c, HepLorentzVector&, HepLorentzVector&,WTrackParameter &);
 
 	bool    isGoodTrackForLambda(EvtRecTrack* trk);
 
-	bool Mass1c_Lmdc(WTrackParameter &sigma0, WTrackParameter &piTrk, WTrackParameter &etaTrk,double& lmdc_chis,HepLorentzVector& p4_lmdc_1c);
+	bool Mass1c_Lmdc(WTrackParameter &sigma0, WTrackParameter &piTrk, WTrackParameter &pi0Trk,double& lmdc_chis,HepLorentzVector& p4_lmdc_1c);
 
   private:
 
@@ -90,7 +90,13 @@ class Sigma0PionEta:public Algorithm {
 	NTuple::Item<int> m_ndaughterAm;
 	NTuple::Array<int> m_Am_id;
 	NTuple::Matrix<double> m_Am_ptruth;
-	
+	NTuple::Item<int> m_idxmc_p;
+	NTuple::Item<int> m_idxmc_m;
+	NTuple::Array<int> m_pdgid_p;
+	NTuple::Array<int> m_motheridx_p;
+	NTuple::Array<int> m_pdgid_m;
+	NTuple::Array<int> m_motheridx_m;
+
 	NTuple::Item<int> mc_run;
 	NTuple::Item<int> mc_event;
 	NTuple::Item<int> mc_mode1;
@@ -103,39 +109,50 @@ class Sigma0PionEta:public Algorithm {
 	NTuple::Array<int> mc_Am_id;
 	NTuple::Matrix<double> mc_Am_ptruth;
 
-    NTuple::Array<int>m_charge;
-    NTuple::Item<int>m_ngood;
-    NTuple::Array<double>m_mass;
-    NTuple::Array<double>m_ebeam;
-    NTuple::Array<double>m_mbc;
-    NTuple::Array<double>m_deltaE;
-    NTuple::Array<double>m_deltaE_lmd_pip_eta;
-    
-    NTuple::Array<double> m_lambda_p4;
-    NTuple::Array<double>  m_lambda_mass;
-    NTuple::Array<double>  m_lambda_chis1;
-    NTuple::Array<double>  m_lambda_lchue;
-    
-    NTuple::Array<double>  m_lmdc_chis;
-    NTuple::Array<double>  m_eta_mass;
-	
-    NTuple::Matrix<double> m_eta_gam1_p4;
-    NTuple::Matrix<double> m_eta_gam2_p4;
-    NTuple::Matrix<double> m_sigma0_gam_p4;
+	NTuple::Array<int>m_charge;
+	NTuple::Item<int>m_ngood;
+	NTuple::Array<double>m_mass;
+	NTuple::Array<double>m_ebeam;
+	NTuple::Array<double>m_mbc;
+	NTuple::Array<double>m_deltaE;
+	NTuple::Array<double>m_deltaE_lmd_pip_pi0;
 
-    NTuple::Array<double> m_sigma0_mass;
-    NTuple::Array<double> m_sigma0_chis;
+	NTuple::Array<double> m_lambda_p4;
+	NTuple::Array<double>  m_lambda_mass;
+	NTuple::Array<double>  m_lambda_chis1;
+	NTuple::Array<double>  m_lambda_lchue;
 
-	NTuple::Array<double> m_eta_chis;
+	NTuple::Array<double>  m_lmdc_chis;
 
-    void addItem();
+	NTuple::Matrix<double> m_gam0_p4;
+	NTuple::Matrix<double> m_gam1_p4;
+	NTuple::Matrix<double> m_gam2_p4;
+	NTuple::Matrix<double> m_gam3_p4;
+	NTuple::Matrix<double> m_gam4_p4;
+	NTuple::Matrix<double> m_gam5_p4;
+	NTuple::Matrix<double> m_gam0_p4_before;
+	NTuple::Matrix<double> m_gam1_p4_before;
+	NTuple::Matrix<double> m_gam2_p4_before;
+	NTuple::Matrix<double> m_gam3_p4_before;
+	NTuple::Matrix<double> m_gam4_p4_before;
+	NTuple::Matrix<double> m_gam5_p4_before;
+	NTuple::Array<double>  m_ang_gam_antiproton;
 
-    HepLorentzVector getP4(RecEmcShower *gTrk, Hep3Vector origin);
+	void addItem();
+
+	HepLorentzVector getP4(RecEmcShower *gTrk, Hep3Vector origin);
+bool isGoodSigmap(RecMdcKalTrack *ppTrk, RecEmcShower *shr1, RecEmcShower *shr2);
   protected:
 
 };
+
+typedef struct{
+	int index;
+	double ang_antiproton;
+}Gam_info;
+
 //add your inline methods
 
 //
 
-#endif//Sigma0PionEta_Header
+#endif//SigmapPi0Pi0_Header
